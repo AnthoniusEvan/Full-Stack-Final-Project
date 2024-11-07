@@ -1,3 +1,22 @@
+<?php
+require_once('classes/user.php');
+session_start();
+
+define('siteToken',1);
+
+if (!file_exists('config.php')){
+  die('Restricted Access');
+}
+require_once('./functions/sanitizers.php');
+require_once('config.php');
+
+if (isset($_GET['logout'])){
+  session_unset();
+
+  header('Location: index.php?successMessage=Successfully Logged Out!');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,16 +35,60 @@
     <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/app.css">
     <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon">
+
+    <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="assets/js/pages/dashboard.js"></script> -->
+    <script src="assets/js/main.js"></script>
+
+    <script src="assets/vendors/jquery/jquery.min.js"></script>
+    <link href="assets/css/select2.min.css" rel="stylesheet" />
+    <script src="assets/vendors/select2/select2.min.js"></script>
+
+    <script src="assets/js/extensions/sweetalert2.js" defer></script>
+    <script src="assets/vendors/sweetalert2/sweetalert2.all.min.js" defer></script>
+
 </head>
 
 <body>
+<?php
+  $waitDuration = 0.5;
+  $error = "";
+  if(!isset($_SESSION["last_request_time"])){
+    $_SESSION["last_request_time"] = time();
+  }
+  else{
+    if (!isset($_GET["successMessage"]) && (time() - $_SESSION["last_request_time"]) < $waitDuration){
+      $error = "To frequent requests, please wait for $waitDuration seconds before submitting another request.";
+    }
+    else{
+      $_SESSION["last_request_time"] = time();
+    }
+  }
+  
+  if ($error != ""){
+    ?>
+    <div class="alert alert-danger alert-dismissible show fade" style="z-index: 100000; top:0; position: sticky" role="alert">
+        <?php echo($error)?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"
+            aria-label="Close"></button>
+    </div>
+
+    <?php
+  }
+
+  if (!isset($_SESSION['active_user']) && false /* remove '&& false' later after login.php is ready */){ 
+    require_once('pages/login.php');
+  }
+  else{
+  ?>
     <div id="app">
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                            <a href="index.php"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -36,50 +99,50 @@
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item <?php if ($_GET["page"]=="staffs_list") echo('active') ?>">
+                            <a href="index.php?page=staffs_list" class='sidebar-link'>
                                 <i class="bi bi-person"></i>
                                 <span>Staff</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item <?php if ($_GET["page"]=="cities_list") echo('active') ?>">
+                            <a href="index.php?page=cities_list" class='sidebar-link'>
                                 <i class="bi bi-building"></i>
                                 <span>City</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item <?php if ($_GET["page"]=="cages_list") echo('active') ?>">
+                            <a href="index.php?page=cages_list" class='sidebar-link'>
                                 <i class="bi bi-border"></i>
                                 <span>Cage</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item <?php if ($_GET["page"]=="clients_list") echo('active') ?>">
+                            <a href="index.php?page=clients_list" class='sidebar-link'>
                                 <i class="bi bi-file-person"></i>
                                 <span>Client</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item <?php if ($_GET["page"]=="branches_list") echo('active') ?>">
+                            <a href="index.php?page=branches_list" class='sidebar-link'>
                                 <i class="bi bi-bezier2"></i>
                                 <span>Branch</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item <?php if ($_GET["page"]=="transportrates_list") echo('active') ?>">
+                            <a href="index.php?page=transportrates_list" class='sidebar-link'>
                                 <i class="bi bi-truck"></i>
                                 <span>Transport Rate</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item <?php if ($_GET["page"]=="transactions_list") echo('active') ?>">
+                            <a href="index.php?page=transactions_list" class='sidebar-link'>
                                 <i class="bi bi-cash"></i>
                                 <span>Transactions</span>
                             </a>
@@ -428,11 +491,16 @@
                 </a>
             </header>
 
-            <div class="page-heading">
+            <!-- <div class="page-heading">
                 <h3>Dashboard</h3>
-            </div>
+            </div> -->
+          
             <div class="page-content">
-                
+                 <?php
+                if (isset($_GET["page"])){
+                  require_once('pages/'.$_GET["page"].".php");
+                }
+                ?>
                 <!-- <section class="row">
                     <div class="col-12 col-lg-9">
                         <div class="row">
@@ -712,13 +780,8 @@
             </footer> -->
         </div>
     </div>
-    <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <?php }?>
 
-    <script src="assets/vendors/apexcharts/apexcharts.js"></script>
-    <script src="assets/js/pages/dashboard.js"></script>
-
-    <script src="assets/js/main.js"></script>
 </body>
 
 </html>
