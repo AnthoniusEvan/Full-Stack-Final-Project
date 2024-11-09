@@ -77,7 +77,7 @@ if (isset($_GET['logout'])){
     <?php
   }
 
-  if (!isset($_SESSION['active_user']) && false /* remove '&& false' later after login.php is ready */){ 
+  if (!isset($_SESSION['active_user']) /* remove '&& false' later after login.php is ready */){ 
     require_once('pages/login.php');
   }
   else{
@@ -783,5 +783,7 @@ if (isset($_GET['logout'])){
     <?php }?>
 
 </body>
-
+<?php
+  $dbCon->close();
+?>
 </html>

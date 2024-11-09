@@ -1,3 +1,27 @@
+<?php
+    defined('siteToken') or die('Restricted Access');
+
+    if(!file_exists("./classes/user.php")) {
+      die("Class not found");
+    }
+    require_once("./classes/user.php");
+  
+    $user = new User($dbCon);
+  
+    $errorMessage = "";
+    if(!empty($_POST["Username"])&& !empty($_POST["Password"])){
+      list($username, $validation_status) = sanitize($dbCon, $_POST["Username"], "string");
+      list($userPassword, $validation_status) = sanitize($dbCon, $_POST["Password"], "string");
+  
+      if($user->login($username, $userPassword)){
+          $_SESSION['active_user'] = $user;
+          header('Location: index.php');
+      }
+      else{
+          $errorMessage = "Invalid username or password";
+      }
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,18 +45,30 @@
                     <div class="auth-logo">
                         <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo"></a>
                     </div>
+                    
+                    <?php
+                    if($errorMessage!="") {?>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6><i class="fas fa-ban"></i><b><?php echo($errorMessage);?></b></h6>
+                    </div>
+                <?php }
+                    if(isset($_GET['successMessage'])){?>
+                    <div class="alert alert-success alert-dismissible" role="info">
+                    <h6><?php echo($_GET['successMessage']);?></b></h6>
+                    </div>
+                <?php } ?>
                     <h1 class="auth-title">Log in.</h1>
                     <p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p>
 
-                    <form action="index.html">
+                    <form class="user" method="POST" action="index.php">
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control-xl" placeholder="Username">
+                            <input type="text" name="Username" id="Username" class="form-control form-control-xl" placeholder="Username">
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" class="form-control form-control-xl" placeholder="Password">
+                            <input type="password" name="Password" id="Password" class="form-control form-control-xl" placeholder="Password">
                             <div class="form-control-icon">
                                 <i class="bi bi-shield-lock"></i>
                             </div>
