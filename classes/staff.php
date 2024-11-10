@@ -38,6 +38,13 @@ class Staff{
         return $resultSet;
     }
 
+    public function username_already_exists($username){
+        $q = "SELECT Username FROM staff WHERE Username = '$username'";
+        $resultSet = $this->dbCon->query($q);
+
+        return mysqli_num_rows($resultSet)>0;
+    }
+
     public function insert_data($data = array()){
         global $salt;
         foreach($data as $key => $value){

@@ -13,12 +13,11 @@ if (!file_exists('./classes/staff.php')){
 require_once('./classes/staff.php');
 
 $staff = new Staff($dbCon);
-
 ?>
 
 <div class="card">
     <div class="d-flex justify-content-between align-items-center mb-3 card-header">
-        <h1 class="h3 mb-0 text-gray-800">Staffs - 
+        <h1 class="h3 mb-0 text-gray-800">Staff - 
         <?php
             $modeText = "";
             switch($mode){
@@ -28,9 +27,8 @@ $staff = new Staff($dbCon);
                     break;
                 case "update":
                     $modeText = "Update";
-                    echo($modeText);
+                    
                     $id=$_GET["id"];
-
 
                     $col= "s.Id as id, b.Id as branch_id, b.Name as branch_name, s.Name as name, s.Username as username, s.LastModifier as last_modifier, s.LastUpdateTime as last_update_time";
 
@@ -41,10 +39,14 @@ $staff = new Staff($dbCon);
                     else{
                         die('Incorrect staff ID');
                     }
-                    break;
 
+                    if ($_SESSION['active_user']->role != "Administrator" && $_SESSION['active_user']->id != $id){
+                        die('Restricted Access');
+                    }
+                    else echo($modeText);
+                    break;
                 default:
-                die('Incorrect Access');
+                    die('Incorrect Access');
             }
             
         ?></h1>
@@ -104,12 +106,12 @@ $staff = new Staff($dbCon);
 
                 <div class="form-group mb-3">
                     <label for="Name">Name</label>
-                    <input class="form-control mb-3" type="text" placeholder="Search by staff name" id="Name" name="Name" required value="<?php if ($mode=="update") echo($row["name"]);?>">
+                    <input class="form-control mb-3" type="text" placeholder="Full name" id="Name" name="Name" required value="<?php if ($mode=="update") echo($row["name"]);?>">
                 </div> 
 
                 <div class="form-group mb-3">
                     <label for="Username">Username</label>
-                    <input class="form-control mb-3" type="text" placeholder="Search by staff username" id="Username" name="Username" required value="<?php if ($mode=="update") echo($row["username"]);?>">
+                    <input class="form-control mb-3" type="text" placeholder="Username" id="Username" name="Username" required value="<?php if ($mode=="update") echo($row["username"]);?>">
                 </div> 
 
                 <div class="form-group">
@@ -128,8 +130,53 @@ $staff = new Staff($dbCon);
                     <div class="col-sm-4" style="text-align:center;">
                         <?php
                             if ($mode=="update"){
+                                $loggedin_warning="";
+                                if ($_SESSION['active_user']->id == $row['id']) $loggedin_warning = "You are currently logged in as the staff that you are going to remove. The system will log you out after the account is deleted.";
                             ?>
-                                <button type="submit" class="btn btn-danger" name="delete" value="Delete" onclick="return confirm('Delete staff named <?php echo($row['Name']);?>?');">Delete</button>
+                                <div class="modal-danger me-1 mb-1 d-inline-block">
+                                    <!-- Button trigger for danger theme modal -->
+                                    <button type="button" class="btn btn-danger"
+                                        data-bs-toggle="modal" data-bs-target="#danger">
+                                        Delete
+                                    </button>
+
+                                    <!--Danger theme Modal -->
+                                    <div class="modal fade text-left" id="danger" tabindex="-1"
+                                        role="dialog" aria-labelledby="myModalLabel120"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                            role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger">
+                                                    <h5 class="modal-title white" id="myModalLabel120">
+                                                        Delete staff with username "<?php echo $row['name']; ?>"?
+                                                    </h5>
+                                                    <button type="button" class="close"
+                                                        data-bs-dismiss="modal" aria-label="Close">
+                                                        <i data-feather="x"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" style="text-align:justify;">
+                                                    Deleting a staff account might affect other data involved in the interaction
+                                                    with the account. Data handled by this staff will be replaced by a label explicitly written as 'deleted user'. <?php echo $loggedin_warning?> Would you like to continue?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button"
+                                                        class="btn btn-light-secondary"
+                                                        data-bs-dismiss="modal">
+                                                        <i class="bx bx-x d-block d-sm-none"></i>
+                                                        <span class="d-none d-sm-block">Cancel</span>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger ml-1"
+                                                        name="delete" value="Delete" >
+                                                        <i class="bx bx-check d-block d-sm-none"></i>
+                                                        <span class="d-none d-sm-block">Yes</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php    
                             }
                         ?>
@@ -159,6 +206,7 @@ $staff = new Staff($dbCon);
     </div>
 
 </div>
+
 <script>
     $(document).ready(function(){
         $('.select2-single').select2();
@@ -184,5 +232,3 @@ $staff = new Staff($dbCon);
     
 
 </script>
-<!-- <script src="../assets/js/extensions/sweetalert2.js"></script>
-<script src="../assets/vendors/sweetalert2/sweetalert2.all.min.js"></script> -->

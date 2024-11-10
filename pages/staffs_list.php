@@ -45,6 +45,16 @@ if (!empty($_POST["mode"])){
 
     switch($_POST["mode"]){
         case "insert":
+            if ($staff->username_already_exists($post_data['Username'])) {
+                $errorMsg = 'Staff with username "'.$post_data['Username'].'" already exists!';
+                break;
+            }
+
+            if (empty($_POST["BranchId"])){
+                $errorMsg = 'Please select a branch!';
+                break;
+            }
+
             if ($staff->insert_data($post_data) === FALSE){
                 $errorMsg = "Failed to insert staff data.";
             }
@@ -52,10 +62,16 @@ if (!empty($_POST["mode"])){
             break;
         case "update":
             if (!empty($_POST["delete"])){
+                $_POST["mode"]="delete";
                 if ($staff->remove_data($id) === FALSE){
                     $errorMsg = "Failed to delete staff data.";
                 }
-                $_POST["mode"]="delete";
+                else{
+                    if ($_SESSION['active_user']->id == $id) {
+                        echo "<script>location.href = 'index.php?logout=1';</script>";
+                    }
+                }
+                
                 break;
             }
 
@@ -203,12 +219,20 @@ if (!$validation_status){
                 $resultSet = $staff->get_inner_join_data($columns, $constraint, $limit);
                 if ($resultSet){
                     while($row = $resultSet->fetch_array()){
+
+                        $outline="";
+                        $disabled="";
+                        if ($_SESSION['active_user']->role != "Administrator" && $_SESSION['active_user']->id != $row["id"]){
+                            $outline="-outline";
+                            $disabled="disabled";
+                        }
+
                         echo("
                         <tr>
                         <td>".$row["branch_name"]."</td>
                         <td>".$row["name"]."</td>
                         <td>".$row["username"]."</td>
-                        <td style='text-align: center;'><a href='index.php?page=staff_detail&mode=update&id=".$row["id"]."' class='btn-sm btn-primary'><i class='bi bi-pencil-square'></i></a></td>
+                        <td style='text-align: center;'><a href='index.php?page=staff_detail&mode=update&id=".$row["id"]."'><button class='btn-sm btn$outline-primary' $disabled><i class='bi bi-pencil-square'></i></button></a></td>
                         </tr>
                         ");
                     }
@@ -217,7 +241,6 @@ if (!$validation_status){
         </tbody>
     </table>
 </div>
-
 <?php
     $columns = "count(*) as totalRows";
     $resCount=$staff->get_inner_join_data($columns, $constraint);
