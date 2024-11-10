@@ -150,6 +150,7 @@ CREATE TABLE `staff` (
   `BranchId` int(11) NOT NULL,
   `Username` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `Password` varchar(256) NOT NULL,
+  `Role` varchar(45) NOT NULL,
   `LastUpdateTime` timestamp NOT NULL DEFAULT current_timestamp(),
   `LastModifier` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`Id`),
@@ -166,7 +167,7 @@ CREATE TABLE `staff` (
 
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES ('1','Devon Larrat',5,'devlarrat','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','2024-11-07 07:18:00',NULL),('2','Denis Cyplenkov',2,'cyplenkov','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','2024-11-07 07:18:00',NULL),('4','Justin Bieber',3,'bieberz','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','2024-11-07 07:18:00',NULL),('5','Christiano Ronaldo',4,'ronaldo','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','2024-11-07 07:18:00',NULL),('6','Febriona Mendoza',1,'mendoza','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','2024-11-07 07:18:00',NULL),('7','Steve Rogers',2,'steve','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','2024-11-07 07:18:00',NULL),('8','Marcella Tanjung',6,'cella','a6b9abdf1653539e73ec7e45aeeeb11739f1677d97b4c4c65f0f070ecc1fe491','2024-11-07 07:18:00',NULL);
+INSERT INTO `staff` VALUES ('1','Devon Larrat',5,'devlarrat','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00','1'),('2','Denis Cyplenkov',2,'cyplenkov','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('4','Justin Bieber',3,'bieberz','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00','4'),('5','Christiano Ronaldo',4,'ronaldo','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-10 06:57:08','1'),('6','Febriona Mendoza',1,'mendoza','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('7','Steve Rogers',2,'steve','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('8','Marcella Tanjung',6,'cella','a6b9abdf1653539e73ec7e45aeeeb11739f1677d97b4c4c65f0f070ecc1fe491','Administrator','2024-11-07 07:18:00',NULL);
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,4 +291,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-07 18:39:23
+-- Dump completed on 2024-11-10 14:09:18
