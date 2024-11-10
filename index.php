@@ -66,7 +66,7 @@ if (isset($_GET['logout'])){
     }
   }
   
-  if ($error != ""){
+  if ($error != "" && !isset($_GET["success"])){
     ?>
     <div class="alert alert-danger alert-dismissible show fade" style="z-index: 100000; top:0; position: sticky" role="alert">
         <?php echo($error)?>
@@ -99,49 +99,49 @@ if (isset($_GET['logout'])){
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="staffs_list") echo('active') ?>">
+                        <li class="sidebar-item <?php if ($_GET["page"]=="staffs_list" || $_GET["page"]=="staff_detail") echo('active') ?>">
                             <a href="index.php?page=staffs_list" class='sidebar-link'>
                                 <i class="bi bi-person"></i>
                                 <span>Staff</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="cities_list") echo('active') ?>">
+                        <li class="sidebar-item <?php if ($_GET["page"]=="cities_list" || $_GET["page"]=="city_detail") echo('active') ?>">
                             <a href="index.php?page=cities_list" class='sidebar-link'>
                                 <i class="bi bi-building"></i>
                                 <span>City</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="cages_list") echo('active') ?>">
+                        <li class="sidebar-item <?php if ($_GET["page"]=="cages_list" || $_GET["page"]=="cage_detail") echo('active') ?>">
                             <a href="index.php?page=cages_list" class='sidebar-link'>
                                 <i class="bi bi-border"></i>
                                 <span>Cage</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="clients_list") echo('active') ?>">
+                        <li class="sidebar-item <?php if ($_GET["page"]=="clients_list" || $_GET["page"]=="client_detail") echo('active') ?>">
                             <a href="index.php?page=clients_list" class='sidebar-link'>
                                 <i class="bi bi-file-person"></i>
                                 <span>Client</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="branches_list") echo('active') ?>">
+                        <li class="sidebar-item <?php if ($_GET["page"]=="branches_list" || $_GET["page"]=="branch_detail") echo('active') ?>">
                             <a href="index.php?page=branches_list" class='sidebar-link'>
                                 <i class="bi bi-bezier2"></i>
                                 <span>Branch</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="transportrates_list") echo('active') ?>">
+                        <li class="sidebar-item <?php if ($_GET["page"]=="transportrates_list" || $_GET["page"]=="transportrate_detail") echo('active') ?>">
                             <a href="index.php?page=transportrates_list" class='sidebar-link'>
                                 <i class="bi bi-truck"></i>
                                 <span>Transport Rate</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="transactions_list") echo('active') ?>">
+                        <li class="sidebar-item <?php if ($_GET["page"]=="transactions_list" || $_GET["page"]=="transaction_detail") echo('active') ?>">
                             <a href="index.php?page=transactions_list" class='sidebar-link'>
                                 <i class="bi bi-cash"></i>
                                 <span>Transactions</span>
@@ -484,18 +484,81 @@ if (isset($_GET['logout'])){
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
-        <div id="main">
-            <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
-            </header>
+        <div id="main" class="layout-navbar">
+        <header class='mb-3'>
+                <nav class="navbar navbar-expand navbar-light ">
+                    <div class="container-fluid">
+                        <a href="#" class="burger-btn d-block">
+                            <i class="bi bi-justify fs-3"></i>
+                        </a>
 
-            <!-- <div class="page-heading">
-                <h3>Dashboard</h3>
-            </div> -->
-          
-            <div class="page-content">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                <li class="nav-item dropdown me-1">
+                                    <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class='bi bi-envelope bi-sub fs-4 text-gray-600'></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <h6 class="dropdown-header">Mail</h6>
+                                        </li>
+                                        <li><a class="dropdown-item" href="#">No new mail</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown me-3">
+                                    <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class='bi bi-bell bi-sub fs-4 text-gray-600'></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <h6 class="dropdown-header">Notifications</h6>
+                                        </li>
+                                        <li><a class="dropdown-item">No notification available</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div class="dropdown">
+                                <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="user-menu d-flex">
+                                        <div class="user-name text-end me-3">
+                                            <h6 class="mb-0 text-gray-600"><?php echo $_SESSION['active_user']->name; ?></h6>
+                                            <p class="mb-0 text-sm text-gray-600"><?php echo $_SESSION['active_user']->role; ?></p>
+                                        </div>
+                                        <div class="user-img d-flex align-items-center">
+                                            <div class="avatar avatar-md">
+                                                <img src="assets/images/faces/1.jpg">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                    <li>
+                                        <h6 class="dropdown-header">Hello, <?php echo explode(' ',$_SESSION['active_user']->name)[0]; ?>!</h6>
+                                    </li>
+                                    <li><a class="dropdown-item" href="index.php?page=staff_detail&mode=update&id=<?php echo $_SESSION['active_user']->id ?>"><i class="icon-mid bi bi-person me-2"></i> My
+                                            Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-gear me-2"></i>
+                                            Settings</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-wallet me-2"></i>
+                                            Wallet</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="index.php?logout=1"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a><li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <div id="main-content">
                  <?php
                 if (isset($_GET["page"])){
                   require_once('pages/'.$_GET["page"].".php");

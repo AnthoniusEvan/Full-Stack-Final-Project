@@ -53,7 +53,7 @@ class Staff{
         $values = implode(",", $data);
 
         $new_id = $this->get_new_id();
-        $q = "INSERT INTO staff(Id, $columns) VALUES('$new_id', $values)"; // TODO ADD LAST MODIFIER
+        $q = "INSERT INTO staff(Id, Role, $columns, LastUpdateTime) VALUES('$new_id', 'Staff', $values, CURRENT_TIMESTAMP())";
         return $this->dbCon->query($q);
     }
 
@@ -69,7 +69,7 @@ class Staff{
             }
         }
 
-        $q = "UPDATE staff SET ".implode(',',$updates)." WHERE Id = $id";
+        $q = "UPDATE staff SET ".implode(',',$updates).", LastUpdateTime=CURRENT_TIMESTAMP() WHERE Id = $id";
         return $this->dbCon->query($q);
     }
 

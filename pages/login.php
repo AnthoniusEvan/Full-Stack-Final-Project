@@ -15,7 +15,7 @@
   
       if($user->login($username, $userPassword)){
           $_SESSION['active_user'] = $user;
-          header('Location: index.php');
+          header('Location: index.php?success=1');
       }
       else{
           $errorMessage = "Invalid username or password";

@@ -39,6 +39,8 @@ if (!empty($_POST["mode"])){
         list($post_data['Password'], $validation_status) = sanitize($dbCon, $_POST["Password"], "string");
     }
     
+    $post_data['LastModifier'] = $_SESSION['active_user']->id;
+
     $errorMsg = "";
 
     switch($_POST["mode"]){
