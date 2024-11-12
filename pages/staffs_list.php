@@ -132,7 +132,7 @@ if (!$validation_status){
         <form method="GET" action="index.php">
             <input type="hidden" id="page" name="page" value="staffs_list">
             
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="Branch">Branch</label>
                 <select class="select2-single form-control" name="Branch" id="Branch">
                     <option value="">Select a branch</option>
@@ -158,9 +158,9 @@ if (!$validation_status){
             </div> 
 
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="Name">Name</label>
-                <input class="form-control mb-3" type="text" placeholder="Search by staff name" id="Name" name="Name" <?php if(!empty($_GET["Name"])) echo(" value=".$_GET["Name"])?>>
+                <input class="form-control mb-3" type="text" placeholder="Search by staff name" id="Name" name="Name" <?php if(!empty($_GET["Name"])) echo(" value='".$_GET["Name"])."'" ?>>
             </div> 
 
             <div class="form-group">
@@ -168,7 +168,6 @@ if (!$validation_status){
                 <input class="form-control mb-3" type="text" placeholder="Search by staff username" id="Username" name="Username" <?php if(!empty($_GET["Username"])) echo(" value=".$_GET["Username"])?>>
             </div> 
 
-         
             <br>
             <div class="row">
                 <div class="col-sm-6">
