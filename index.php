@@ -99,49 +99,49 @@ if (isset($_GET['logout'])){
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="staffs_list" || $_GET["page"]=="staff_detail") echo('active') ?>">
+                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="staffs_list" || $_GET["page"]=="staff_detail")) echo('active') ?>">
                             <a href="index.php?page=staffs_list" class='sidebar-link'>
                                 <i class="bi bi-person"></i>
                                 <span>Staff</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="cities_list" || $_GET["page"]=="city_detail") echo('active') ?>">
+                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="cities_list" || $_GET["page"]=="city_detail")) echo('active') ?>">
                             <a href="index.php?page=cities_list" class='sidebar-link'>
                                 <i class="bi bi-building"></i>
                                 <span>City</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="cages_list" || $_GET["page"]=="cage_detail") echo('active') ?>">
+                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="cages_list" || $_GET["page"]=="cage_detail")) echo('active') ?>">
                             <a href="index.php?page=cages_list" class='sidebar-link'>
                                 <i class="bi bi-border"></i>
                                 <span>Cage</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="clients_list" || $_GET["page"]=="client_detail") echo('active') ?>">
+                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="clients_list" || $_GET["page"]=="client_detail")) echo('active') ?>">
                             <a href="index.php?page=clients_list" class='sidebar-link'>
                                 <i class="bi bi-file-person"></i>
                                 <span>Client</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="branches_list" || $_GET["page"]=="branch_detail") echo('active') ?>">
+                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="branches_list" || $_GET["page"]=="branch_detail")) echo('active') ?>">
                             <a href="index.php?page=branches_list" class='sidebar-link'>
                                 <i class="bi bi-bezier2"></i>
                                 <span>Branch</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="transportrates_list" || $_GET["page"]=="transportrate_detail") echo('active') ?>">
+                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="transportrates_list" || $_GET["page"]=="transportrate_detail")) echo('active') ?>">
                             <a href="index.php?page=transportrates_list" class='sidebar-link'>
                                 <i class="bi bi-truck"></i>
                                 <span>Transport Rate</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if ($_GET["page"]=="transactions_list" || $_GET["page"]=="transaction_detail") echo('active') ?>">
+                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="transactions_list" || $_GET["page"]=="transaction_detail")) echo('active') ?>">
                             <a href="index.php?page=transactions_list" class='sidebar-link'>
                                 <i class="bi bi-cash"></i>
                                 <span>Transactions</span>
