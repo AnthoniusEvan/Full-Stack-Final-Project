@@ -75,6 +75,16 @@ if (!empty($_POST["mode"])){
                 break;
             }
 
+            if ($_POST['previousUsername'] != $post_data['Username'] && $staff->username_already_exists($post_data['Username'])) {
+                $errorMsg = 'Staff with username "'.$post_data['Username'].'" already exists!';
+                break;
+            }
+
+            if (empty($_POST["BranchId"])){
+                $errorMsg = 'Please select a branch!';
+                break;
+            }
+
             if ($errorMsg == "" && $staff->update_data($id, $post_data) === FALSE){
                 $errorMsg = "Failed to update staff data.";
             }
@@ -251,8 +261,8 @@ if (!$validation_status){
 <div class="row">
     <div class="col-sm-4">
         <?php
-
-            echo("Showing ".($pageStart + 1)." to ".($pageStart + $maxRows)." of ".$totalRows." records");
+            $pageEnd = min($totalRows,$pageStart + $maxRows);
+            echo("Showing ".min($pageStart + 1, $pageEnd)." to ".$pageEnd." of ".$totalRows." records");
         ?>
     </div>
 

@@ -7,17 +7,23 @@ if (!empty($_GET["mode"])){
 else{
     die('Incorrect Access');
 }
+if (!file_exists('./classes/city.php')){
+    die("Class city Not Found");
+}
+require_once('./classes/city.php');
+
 if (!file_exists('./classes/staff.php')){
     die("Class staff Not Found");
 }
 require_once('./classes/staff.php');
 
 $staff = new Staff($dbCon);
+$city = new City($dbCon);
 ?>
 
 <div class="card">
     <div class="d-flex justify-content-between align-items-center mb-3 card-header">
-        <h1 class="h3 mb-0 text-gray-800">Staff - 
+        <h1 class="h3 mb-0 text-gray-800">City - 
         <?php
             $modeText = "";
             switch($mode){
@@ -30,20 +36,17 @@ $staff = new Staff($dbCon);
                     
                     $id=$_GET["id"];
 
-                    $col= "s.Id as id, b.Id as branch_id, b.Name as branch_name, s.Name as name, s.Username as username, s.LastModifier as last_modifier, s.LastUpdateTime as last_update_time";
+                    $col= "Id, Name, Province, LastModifier, LastUpdateTime";
 
-                    $resultSet = $staff->get_inner_join_data($col, "s.Id=$id", 1);
+                    $resultSet = $city->get_data($col, "Id=$id", 1);
                     if ($resultSet){
                         $row=$resultSet->fetch_array();
                     }
                     else{
-                        die('Incorrect staff ID');
+                        die('Incorrect city ID');
                     }
 
-                    if ($_SESSION['active_user']->role != "Administrator" && $_SESSION['active_user']->id != $id){
-                        die('Restricted Access');
-                    }
-                    else echo($modeText);
+                    echo($modeText);
                     break;
                 default:
                     die('Incorrect Access');
@@ -52,15 +55,15 @@ $staff = new Staff($dbCon);
         ?></h1>
 
         <?php
-            if ($mode == "update" && $row["last_modifier"]!=""){
-                $resultSet = $staff->get_inner_join_data("s.Name as name", "s.Id=".$row['last_modifier'], 1);
+            if ($mode == "update" && $row["LastModifier"]!=""){
+                $resultSet = $staff->get_inner_join_data("s.Name as name", "s.Id=".$row['LastModifier'], 1);
                 if ($resultSet){
                     $modifier=$resultSet->fetch_array();
                 }
                 else{
                     die('Incorrect modifier ID');
                 }
-                $timestamp = strtotime($row['last_update_time']);
+                $timestamp = strtotime($row['LastUpdateTime']);
 
                 echo('<span class="badge bg-light-info">Last modified by '.$modifier['name'].' at '.date("d/m/y H:i", $timestamp).'</span><div style="width:10%"></div>');
             }
@@ -69,7 +72,7 @@ $staff = new Staff($dbCon);
         
         <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="./">Home</a></li>
-            <li class="breadcrumb-item"><a href="index.php?page=staffs_list">Staffs</a></li>
+            <li class="breadcrumb-item"><a href="index.php?page=cities_list">Cities</a></li>
             <li class="breadcrumb-item active" aria_current="page"><?php echo($modeText) ?></li>
         </ol>
     </div>
@@ -78,61 +81,45 @@ $staff = new Staff($dbCon);
     <!-- Input Data -->
     <div class="row card-body" style="padding-bottom:20px;">
         <div class="col-lg-12">
-            <form enctype="multipart/form-data" method="POST" action="index.php?page=staffs_list">
+            <form enctype="multipart/form-data" method="POST" action="index.php?page=cities_list">
                 <input type="hidden" id="mode" name="mode" value=<?php echo($mode) ?>>
                 <?php
                 if ($mode=="update"){
                     echo("<input type='hidden' id='Id' name='Id' value='$id'>");
-                    echo("<input type='hidden' id='previousUsername' name='previousUsername' value='".$row['username']."'>");
+                    echo("<input type='hidden' id='previousName' name='previousName' value='".$row['Name']."'>");
                 }
                 ?>
+
                 <div class="form-group mb-3">
-                    <label for="BranchId">Branch</label>
-                    <select class="select2-single form-control" name="BranchId" id="BranchId">
-                        <option value="">Select a branch</option>
+                    <label for="Name">Name</label>
+                    <input class="form-control mb-3" type="text" placeholder="City name" id="Name" name="Name" required value="<?php if ($mode=="update") echo($row["Name"]);?>">
+                </div> 
+
+                <div class="form-group">
+                    <label for="Province">Province</label>
+                    <select class="select2-single form-control" name="Province" id="Province" required>
+                        <option value="">Select a province</option>
                         <?php
-                            $q = "SELECT Id, Name FROM branch";
-                            $resBranches = $dbCon->query($q);
-                            if ($resBranches){
-                                while ($rBranches=$resBranches->fetch_array()){
-                                    echo("<option value='".$rBranches['Id']."'");
-                                    if ($mode=="update" && $row["branch_id"]==$rBranches['Id']) echo(" selected");
-                                    echo(">".$rBranches['Name']."</option>");
-                                }
+                            $provinces = ["Aceh","Sumatera Utara","Sumatera Barat","Riau","Kepulauan Riau","Jambi","Sumatera Selatan","Kepulauan Bangka Belitung","Bengkulu","Lampung","DKI Jakarta","Jawa Barat","Jawa Tengah","DI Yogyakarta","Jawa Timur","Banten","Bali","Nusa Tenggara Barat","Nusa Tenggara Timur","Kalimantan Barat","Kalimantan Tengah","Kalimantan Selatan","Kalimantan Timur","Kalimantan Utara","Sulawesi Utara","Gorontalo","Sulawesi Tengah","Sulawesi Barat","Sulawesi Selatan","Sulawesi Tenggara","Maluku","Maluku Utara","Papua Barat","Papua"];
+
+                            foreach ($provinces as $province){
+                                $selected = "";
+                                if ($mode=="update" && $province == $row["Province"]) $selected = "selected";
+                                echo "<option value='$province' $selected>$province</option>";
                             }
                         ?>
                     </select>
                 </div> 
 
 
-                <div class="form-group mb-3">
-                    <label for="Name">Name</label>
-                    <input class="form-control mb-3" type="text" placeholder="Full name" id="Name" name="Name" required value="<?php if ($mode=="update") echo($row["name"]);?>">
-                </div> 
-
-                <div class="form-group mb-3">
-                    <label for="Username">Username</label>
-                    <input class="form-control mb-3" type="text" placeholder="Username" id="Username" name="Username" required value="<?php if ($mode=="update") echo($row["username"]);?>">
-                </div> 
-
-                <div class="form-group">
-                    <label for="Password">Password</label>
-                    <div class="input-group mb-3">
-                        <input class="form-control" type="text" placeholder="Password" id="Password" name="Password" <?php if ($mode=="update" && $_SESSION['active_user']->role!="Administrator") echo('disabled'); if ($mode=="insert") echo(" required ");?> aria-describedby="password" value="<?php if ($mode=="update") echo($censorText); ?>"><button class="btn btn-primary" type="button" id="password"><i class="bi bi-eye" id="toggleIcon"></i></button>
-                    </div>
-                </div> 
-        
-
                 <div class="row" style="margin-top: 30px">
                     <div class="col-sm-4">
-                        <a href="index.php?page=staffs_list"><button type="button" class="btn btn-warning">Cancel</button></a>
+                        <a href="index.php?page=cities_list"><button type="button" class="btn btn-warning">Cancel</button></a>
                     </div>
                     
                     <div class="col-sm-4" style="text-align:center;">
                         <?php
                             if ($mode=="update"){
-                                $loggedin_warning="";
-                                if ($_SESSION['active_user']->id == $row['id']) $loggedin_warning = "You are currently logged in as the staff that you are going to remove. The system will log you out after the account is deleted.";
                             ?>
                                 <div class="modal-danger me-1 mb-1 d-inline-block">
                                     <!-- Button trigger for danger theme modal -->
@@ -150,7 +137,7 @@ $staff = new Staff($dbCon);
                                             <div class="modal-content">
                                                 <div class="modal-header bg-danger">
                                                     <h5 class="modal-title white" id="myModalLabel120">
-                                                        Delete staff with username "<?php echo $row['name']; ?>"?
+                                                        Delete "<?php echo $row['Name']; ?>"?
                                                     </h5>
                                                     <button type="button" class="close"
                                                         data-bs-dismiss="modal" aria-label="Close">
@@ -158,8 +145,7 @@ $staff = new Staff($dbCon);
                                                     </button>
                                                 </div>
                                                 <div class="modal-body" style="text-align:justify;">
-                                                    Deleting a staff account might affect other data involved in the interaction
-                                                    with the account. Data handled by this staff will be replaced by a label explicitly written as 'deleted user'. <?php echo $loggedin_warning?> Would you like to continue?
+                                                    Deleting a city that is related to other data might cause an error. Would you like to continue?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button"
@@ -212,24 +198,4 @@ $staff = new Staff($dbCon);
     $(document).ready(function(){
         $('.select2-single').select2();
     });
-
-    document.getElementById('password').addEventListener('click', async (e) => {
-        const inputPass = document.getElementById("Password");
-        const toggleIcon = document.getElementById("toggleIcon");
-
-        if (!inputPass.disabled || inputPass.dataset.verified == "true"){
-            if (inputPass.type === "password"){
-                inputPass.type = "text";
-                toggleIcon.classList.add("bi-eye-slash");
-                toggleIcon.classList.remove("bi-eye");
-            }
-            else{
-                inputPass.type = "password";
-                toggleIcon.classList.add("bi-eye");
-                toggleIcon.classList.remove("bi-eye-slash");
-            }
-        }
-    });
-    
-
 </script>

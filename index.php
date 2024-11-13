@@ -52,7 +52,7 @@ if (isset($_GET['logout'])){
 
 <body>
 <?php
-  $waitDuration = 0.5;
+  $waitDuration = 0.1;
   $error = "";
   if(!isset($_SESSION["last_request_time"])){
     $_SESSION["last_request_time"] = time();
