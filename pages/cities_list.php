@@ -176,8 +176,8 @@ if (!$validation_status){
                     $constraint.=" AND Name LIKE '%".$name."%'";
                 }
                 if(!empty($_GET["Province"])){
-                    list($username, $validation_status) = sanitize($dbCon, $_GET["Province"], "string");
-                    $constraint.=" AND Province LIKE '%".$username."%'";
+                    list($province, $validation_status) = sanitize($dbCon, $_GET["Province"], "string");
+                    $constraint.=" AND Province LIKE '%".$province."%'";
                 }
 
                 $pageStart = ($pageNum-1) * $maxRows;

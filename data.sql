@@ -92,7 +92,7 @@ CREATE TABLE `city` (
   PRIMARY KEY (`Id`),
   KEY `fk_City_Staff1_idx` (`LastModifier`),
   CONSTRAINT `fk_City_Staff1` FOREIGN KEY (`LastModifier`) REFERENCES `staff` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +101,7 @@ CREATE TABLE `city` (
 
 LOCK TABLES `city` WRITE;
 /*!40000 ALTER TABLE `city` DISABLE KEYS */;
-INSERT INTO `city` VALUES (1,'Surabaya','Jawa Timur','2024-11-07 07:04:42',NULL),(2,'Malang','jawa Timur','2024-11-07 07:04:42',NULL),(3,'Jember','Jawa Timur','2024-11-07 07:04:42',NULL),(4,'Madiun','Jawa Timur','2024-11-07 07:04:42',NULL),(5,'Jogja','Jawa Tengah','2024-11-07 07:04:42',NULL),(6,'Jakarta','Jawa Barat','2024-11-07 07:04:42',NULL);
+INSERT INTO `city` VALUES (1,'Surabaya','Jawa Timur','2024-11-13 12:02:13','1'),(2,'Malang','Jawa Timur','2024-11-07 07:04:42',NULL),(3,'Jember','Jawa Timur','2024-11-07 07:04:42',NULL),(4,'Madiun','Jawa Timur','2024-11-13 12:16:40','8'),(5,'Jogja','Jawa Tengah','2024-11-07 07:04:42',NULL),(6,'Jakarta','DKI Jakarta','2024-11-13 12:03:55','1');
 /*!40000 ALTER TABLE `city` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,6 +134,7 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
+INSERT INTO `client` VALUES (1,'John Doe','123 Maple St','1234567890',3,'2024-11-14 10:02:35',NULL),(2,'Jane Smith','456 Oak Ave','2345678901',5,'2024-11-14 10:02:35',NULL),(3,'Alice Johnson','789 Pine Dr','3456789012',2,'2024-11-14 10:02:35',NULL),(4,'Bob Williams','101 Cedar Ln','4567890123',4,'2024-11-14 10:02:35',NULL),(5,'Charlie Brown','202 Birch Rd','5678901234',1,'2024-11-14 10:14:01','7'),(6,'Emily Davis','303 Elm St','6789012345',6,'2024-11-14 10:02:35',NULL),(7,'Frank Thomas','404 Maple Ave','7890123456',2,'2024-11-14 10:02:35',NULL),(8,'Grace Lee','505 Oak St','8901234567',3,'2024-11-14 10:02:35',NULL),(9,'Henry Wilson','606 Pine Ave','9012345678',5,'2024-11-14 10:02:35',NULL),(10,'Ivy Martinez','707 Cedar Blvd','0123456789',4,'2024-11-14 10:02:35',NULL),(11,'Jack Harris','808 Birch St','1234567809',1,'2024-11-14 10:02:35',NULL),(12,'Kelly Clark','909 Elm Blvd','2345678012',6,'2024-11-14 10:02:35',NULL),(13,'Liam Walker','1010 Maple Dr','3456789123',3,'2024-11-14 10:02:35',NULL),(14,'Mia Lewis','1111 Oak Ave','4567890234',2,'2024-11-14 10:02:35',NULL),(15,'Noah King','1212 Pine St','5678901345',4,'2024-11-14 10:02:35',NULL),(16,'Olivia Scott','1313 Cedar Rd','6789012456',5,'2024-11-14 10:02:35',NULL),(17,'Paul Young','1414 Birch Blvd','7890123567',6,'2024-11-14 10:02:35',NULL),(18,'Quinn Hall','1515 Elm Dr','8901234678',1,'2024-11-14 10:02:35',NULL),(19,'Rachel Allen','1616 Maple Ln','9012345789',4,'2024-11-14 10:02:35',NULL),(20,'Sam Wright','1717 Oak Blvd','0123456890',3,'2024-11-14 10:02:35',NULL);
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +168,7 @@ CREATE TABLE `staff` (
 
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES ('1','Devon Larrat',5,'devlarrat','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00','1'),('2','Denis Cyplenkov',2,'cyplenkov','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('4','Justin Bieber',3,'bieberz','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00','4'),('5','Christiano Ronaldo',4,'ronaldo','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-10 06:57:08','1'),('6','Febriona Mendoza',1,'mendoza','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('7','Steve Rogers',2,'steve','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('8','Marcella Tanjung',6,'cella','a6b9abdf1653539e73ec7e45aeeeb11739f1677d97b4c4c65f0f070ecc1fe491','Administrator','2024-11-07 07:18:00',NULL);
+INSERT INTO `staff` VALUES ('1','Devon Larrat',5,'devlarrat','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-13 11:17:15','8'),('2','Denis Cyplenkov',2,'cyplenkov','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('4','Justin Bieber',3,'bieberz','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00','4'),('5','Christiano Ronaldo',4,'ronaldo','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-10 06:57:08','1'),('6','Febriona Mendoza',1,'mendoza','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('7','Steve Rogers',2,'steve','07f60032ed0d5b4db9c524ffdaac2ded9989e94bcc30db5828096e4678da90ef','Staff','2024-11-07 07:18:00',NULL),('8','Marcella Tanjung',6,'cella','a6b9abdf1653539e73ec7e45aeeeb11739f1677d97b4c4c65f0f070ecc1fe491','Administrator','2024-11-13 12:15:42','8');
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,4 +292,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-10 14:09:18
+-- Dump completed on 2024-11-14 17:16:16
