@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
 --
 -- Host: 127.0.0.1    Database: petvoyage
 -- ------------------------------------------------------
--- Server version	5.5.5-10.4.27-MariaDB
+-- Server version	5.5.5-10.4.28-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -44,7 +44,7 @@ CREATE TABLE `branch` (
 
 LOCK TABLES `branch` WRITE;
 /*!40000 ALTER TABLE `branch` DISABLE KEYS */;
-INSERT INTO `branch` VALUES (1,'Pet Voyage I','Psr Jatinegara Bl BKS/30','087844508972',6,'2024-11-07 07:08:07',NULL),(2,'Pet Voyage II','Jl Gn Sawo 2','081267863542',5,'2024-11-07 07:08:07',NULL),(3,'Pet Voyage III','Psr Turi Baru Street H/91-92','087846275912',1,'2024-11-07 07:08:07',NULL),(4,'Pet Voyage IV','Jl Guru Sinumba 2','087856281542',2,'2024-11-07 07:08:07',NULL),(5,'Pet Voyage V','Jl Gedung Baru','087686471564',3,'2024-11-07 07:08:07',NULL),(6,'Pet Voyage VI','Jl Kapt Muslim Halvetia','081256486235',4,'2024-11-07 07:08:07',NULL);
+INSERT INTO `branch` VALUES (1,'Pet Voyage I','Psr Jatinegara Bl BKS/30','087844508972',6,'2024-11-07 07:08:07',NULL),(2,'Pet Voyage II','Jl Gn Sawo 2','081267863542',5,'2024-11-07 07:08:07',NULL),(3,'Pet Voyage III','Psr Turi Baru Street H/91-92','087846275912',1,'2024-11-07 07:08:07',NULL),(4,'Pet Voyage IV','Jl Guru Sinumba 2','087856281542',2,'2024-11-07 07:08:07',NULL),(5,'Pet Voyage V','Jl Gedung Baru','087686471564',3,'2024-11-07 07:08:07',NULL),(6,'Pet Voyage VI','Jl Kapt Muslim Halvetia','081256486235',4,'2024-11-07 07:08:07',NULL),(7,'Pet Voyage VII','Jl Rungkut Industri','081256486233',1,'2024-11-17 09:17:49','7');
 /*!40000 ALTER TABLE `branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +64,7 @@ CREATE TABLE `cage` (
   PRIMARY KEY (`Id`),
   KEY `fk_Cage_Staff1_idx` (`LastModifier`),
   CONSTRAINT `fk_Cage_Staff1` FOREIGN KEY (`LastModifier`) REFERENCES `staff` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,6 +73,7 @@ CREATE TABLE `cage` (
 
 LOCK TABLES `cage` WRITE;
 /*!40000 ALTER TABLE `cage` DISABLE KEYS */;
+INSERT INTO `cage` VALUES (1,'Cage A','10x5x4 cm','2024-11-16 07:00:00',NULL),(2,'Cage B','8x6x3 cm','2024-11-16 03:30:00',NULL),(3,'Cage C','12x7x5 cm','2024-11-15 01:45:00',NULL),(4,'Cage D','9x4x3.5 cm','2024-11-16 09:20:00',NULL),(5,'Cage E','8x9x10 cm','2024-11-17 08:50:10','7');
 /*!40000 ALTER TABLE `cage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -292,4 +293,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-14 17:16:16
+-- Dump completed on 2024-11-17 16:22:11
