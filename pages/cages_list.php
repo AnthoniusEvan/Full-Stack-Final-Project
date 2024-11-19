@@ -127,25 +127,10 @@ if (!$validation_status){
                 <label for="Name">Name</label>
                 <input class="form-control mb-3" type="text" placeholder="Search by cage name" id="Name" name="Name" <?php if(!empty($_GET["Name"])) echo(" value='".$_GET["Name"])."'" ?>>
             </div> 
-
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="Dimension">Dimension</label>
-                <select class="select2-single form-control" name="Dimension" id="Dimension">
-                    <option value="">Select cage dimension</option>
-                    <?php
-                        $dimensions = ["10x5x4 cm", "8x6x3 cm","12x7x5 cm","9x4x3.5 cm","15x10x8 cm"];
-
-                        foreach ($dimensions as $dimension) {
-                            $selected = "";
-                            if (!empty($_GET["Dimensions"]) && $dimension == $_GET["Dimensions"]) {
-                                $selected = "selected";
-                            }
-                            echo "<option value='$dimension' $selected>$dimension</option>";
-                        }
-                    ?>
-                </select>
+                <input class="form-control mb-3" type="text" placeholder="Search by dimesion size" id="Dimension" name="Dimension" <?php if(!empty($_GET["Dimension"])) echo(" value='".$_GET["Dimension"])."'" ?>>
             </div> 
-
             <br>
             <div class="row">
                 <div class="col-sm-6">
