@@ -18,12 +18,12 @@ if (!file_exists('./classes/staff.php')){
 require_once('./classes/staff.php');
 
 $staff = new Staff($dbCon);
-$branch = new branch($dbCon);
+$branch = new Branch($dbCon);
 ?>
 
 <div class="card">
     <div class="d-flex justify-content-between align-items-center mb-3 card-header">
-        <h1 class="h3 mb-0 text-gray-800">branch - 
+        <h1 class="h3 mb-0 text-gray-800">Branch - 
         <?php
             $modeText = "";
             switch($mode){
@@ -72,7 +72,7 @@ $branch = new branch($dbCon);
         
         <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="./">Home</a></li>
-            <li class="breadcrumb-item"><a href="index.php?page=branches_list">branches</a></li>
+            <li class="breadcrumb-item"><a href="index.php?page=branches_list">Branches</a></li>
             <li class="breadcrumb-item active" aria_current="page"><?php echo($modeText) ?></li>
         </ol>
     </div>
@@ -92,7 +92,7 @@ $branch = new branch($dbCon);
 
                 <div class="form-group mb-3">
                     <label for="Name">Name</label>
-                    <input class="form-control mb-3" type="text" placeholder="branch name" id="Name" name="Name" required value="<?php if ($mode=="update") echo($row["Name"]);?>">
+                    <input class="form-control mb-3" type="text" placeholder="Branch name" id="Name" name="Name" required value="<?php if ($mode=="update") echo($row["Name"]);?>">
                 </div> 
                 <div class="form-group mb-3">
                     <label for="Address">Address</label>

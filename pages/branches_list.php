@@ -6,7 +6,7 @@ if (!file_exists('./classes/branch.php')){
 }
 require_once('./classes/branch.php');
 
-$branch = new branch($dbCon);
+$branch = new Branch($dbCon);
 $errorMsg = "";
 if (!empty($_POST["mode"])){
     $post_data = array();
@@ -119,10 +119,10 @@ if (!$validation_status){
 ?>
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">branchs</h1>
+    <h1 class="h3 mb-0 text-gray-800">Branches</h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="./">Home</a></li>
-        <li class="breadcrumb-item active" aria_current="page">branchs</li>
+        <li class="breadcrumb-item active" aria_current="page">Branches</li>
     </ol>
 </div>
 

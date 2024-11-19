@@ -131,7 +131,7 @@ if (!$validation_status){
             <div class="form-group">
                 <label for="Dimension">Dimension</label>
                 <select class="select2-single form-control" name="Dimension" id="Dimension">
-                    <option value="">Select a Dimension</option>
+                    <option value="">Select cage dimension</option>
                     <?php
                         $dimensions = ["10x5x4 cm", "8x6x3 cm","12x7x5 cm","9x4x3.5 cm","15x10x8 cm"];
 

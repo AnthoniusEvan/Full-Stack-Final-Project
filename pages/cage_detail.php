@@ -23,7 +23,7 @@ $cage = new cage($dbCon);
 
 <div class="card">
     <div class="d-flex justify-content-between align-items-center mb-3 card-header">
-        <h1 class="h3 mb-0 text-gray-800">cage - 
+        <h1 class="h3 mb-0 text-gray-800">Cage - 
         <?php
             $modeText = "";
             switch($mode){
@@ -92,7 +92,7 @@ $cage = new cage($dbCon);
 
                 <div class="form-group mb-3">
                     <label for="Name">Name</label>
-                    <input class="form-control mb-3" type="text" placeholder="cage name" id="Name" name="Name" required value="<?php if ($mode=="update") echo($row["Name"]);?>">
+                    <input class="form-control mb-3" type="text" placeholder="Cage name" id="Name" name="Name" required value="<?php if ($mode=="update") echo($row["Name"]);?>">
                 </div> 
                 <div class="form-group mb-3">
                     <label for="Dimension">Dimension</label>
