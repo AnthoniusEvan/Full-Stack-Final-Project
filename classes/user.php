@@ -6,6 +6,7 @@ class User{
     public string $username;
     public string $name;
     public string $role;
+    public int $branch_id;
 
     public function __construct($dbConnection){
         $this->dbCon = $dbConnection;
@@ -18,7 +19,7 @@ class User{
     public function login($username, $password){
         global $salt;
         
-        $q = "SELECT Id, Username, Name, Role FROM staff WHERE Username='$username' AND Password=SHA2('$password$salt',256)";
+        $q = "SELECT Id, Username, Name, Role, BranchId FROM staff WHERE Username='$username' AND Password=SHA2('$password$salt',256)";
 
         $resultSet = $this->dbCon->query($q);
         if (mysqli_num_rows($resultSet) > 0){
@@ -27,6 +28,7 @@ class User{
             $this->username = $row["Username"];
             $this->name = $row["Name"];
             $this->role = $row["Role"];
+            $this->branch_id = $row["BranchId"];
 
             return true;
         }
