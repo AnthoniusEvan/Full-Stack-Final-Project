@@ -79,8 +79,27 @@ $transportRate = new TransportRate($dbCon);
                     echo("<input type='hidden' id='CageId' name='CageId' value='$cageId'>");
                 }
                 ?>
-
-                <div class="form-group">
+                <?php if ($mode == "update") { ?>
+                    <div class="form-group mb-3">
+                        <label for="LastUpdateTime">City Origin</label>
+                        <input class="form-control" type="text" id="LastUpdateTime" name="LastUpdateTime" readonly value="<?php echo($cityOrigin); ?>">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="LastModifier">City Destination</label>
+                        <input class="form-control" type="text" id="LastModifier" name="LastModifier" readonly value="<?php echo($cityDestination); ?>">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="LastModifier">Cage Dimension</label>
+                        <input class="form-control" type="text" id="LastModifier" name="LastModifier" readonly value="<?php echo($cageId); ?>">
+                    </div>
+                    <div class="form-group mb-3">
+                    <label for="Rate">Rate</label>
+                    <input class="form-control" type="number" step="0.01" id="Rate" name="Rate" required value="<?php if ($mode == "update") echo($row["Rate"]); ?>">
+                </div>
+                    <?php } 
+                    else {?>
+                    
+                <div class="form-group" id = "txtCityOri" name = "txtCityOri">
                 <label for="cityOrigin">City Origin</label>
                 <select class="select2-single form-control" name="cityOrigin" id="cityOrigin" required>
                     <option value="">Select a City Origin</option>
@@ -98,7 +117,7 @@ $transportRate = new TransportRate($dbCon);
                 </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id = "txtCityDes" name = "txtCityDes">
                 <label for="cityDestination">City Destination</label>
                 <select class="select2-single form-control" name="cityDestination" id="cityDestination" required>
                     <option value="">Select a City Destination</option>
@@ -119,7 +138,7 @@ $transportRate = new TransportRate($dbCon);
                 </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id = "txtCage" name = "txtCage"> 
                 <label for="cageId">Cage</label>
                 <select class="select2-single form-control" name="cageId" id="cageId" required>
                     <option value="">Select a Cage</option>
@@ -149,7 +168,7 @@ $transportRate = new TransportRate($dbCon);
                     <label for="Rate">Rate</label>
                     <input class="form-control" type="number" step="0.01" id="Rate" name="Rate" required value="<?php if ($mode == "update") echo($row["Rate"]); ?>">
                 </div>
-
+                <?php }?>
                 <!-- <?php if ($mode == "update") { ?>
                     <div class="form-group mb-3">
                         <label for="LastUpdateTime">Last Update Time</label>
