@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: petvoyage
 -- ------------------------------------------------------
--- Server version	5.5.5-10.4.28-MariaDB
+-- Server version	5.5.5-10.4.27-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -188,17 +188,21 @@ CREATE TABLE `transaction` (
   `CreatedBy` varchar(50) NOT NULL,
   `DestinationAddress` varchar(200) NOT NULL,
   `DestinationCity` smallint(5) unsigned NOT NULL,
+  `OriginCity` smallint(5) unsigned NOT NULL,
   `ExpectedArrival` date NOT NULL,
   `LastUpdateTime` timestamp NOT NULL DEFAULT current_timestamp(),
   `LastModifier` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`BranchId`,`Id`),
+  `Status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`Id`,`BranchId`),
   KEY `fk_Transaction_Branch1_idx` (`BranchId`),
   KEY `fk_Transaction_Client1_idx` (`ClientId`),
   KEY `fk_Transaction_Staff1_idx` (`CreatedBy`),
-  KEY `fk_Transaction_City1_idx` (`DestinationCity`),
   KEY `fk_Transaction_Staff2_idx` (`LastModifier`),
+  KEY `fk_Transaction_City2_idx` (`OriginCity`),
+  KEY `fk_Transaction_City1_idx` (`DestinationCity`,`OriginCity`),
   CONSTRAINT `fk_Transaction_Branch1` FOREIGN KEY (`BranchId`) REFERENCES `branch` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Transaction_City1` FOREIGN KEY (`DestinationCity`) REFERENCES `city` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Transaction_City2` FOREIGN KEY (`OriginCity`) REFERENCES `city` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Transaction_Client1` FOREIGN KEY (`ClientId`) REFERENCES `client` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Transaction_Staff1` FOREIGN KEY (`CreatedBy`) REFERENCES `staff` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Transaction_Staff2` FOREIGN KEY (`LastModifier`) REFERENCES `staff` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -211,6 +215,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+INSERT INTO `transaction` VALUES (2,1,'2024-12-03',19,'7','Jl Dharmahusada',1,3,'2025-03-12','2024-12-03 03:16:57',NULL,NULL),(6,1,'2024-12-02',3,'8','Jl Sudirman 123',2,1,'2025-11-12','2024-12-02 15:42:05',NULL,''),(6,2,'2024-12-02',15,'8','Jl Margorejo Indah',3,1,'2022-12-21','2024-12-02 17:26:54',NULL,NULL),(6,3,'2024-12-02',2,'8','Jl Margorejo Indah 989',1,2,'2029-09-09','2024-12-02 17:36:44',NULL,NULL),(6,4,'2024-12-02',2,'8','Jl Margorejo Indah 989',1,2,'2029-09-09','2024-12-02 17:37:33',NULL,'void');
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,6 +232,7 @@ CREATE TABLE `transactiondetail` (
   `TransactionId` int(11) NOT NULL,
   `CageId` smallint(5) unsigned DEFAULT NULL,
   `Description` varchar(100) NOT NULL,
+  `Quantity` int(11) NOT NULL,
   `Price` int(11) NOT NULL,
   `LastUpdateTime` timestamp NOT NULL DEFAULT current_timestamp(),
   `LastModifier` varchar(50) DEFAULT NULL,
@@ -237,7 +243,7 @@ CREATE TABLE `transactiondetail` (
   CONSTRAINT `fk_TransactionDetail_Cage1` FOREIGN KEY (`CageId`) REFERENCES `cage` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_TransactionDetail_Staff1` FOREIGN KEY (`LastModifier`) REFERENCES `staff` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_TransactionDetail_Transaction1` FOREIGN KEY (`BranchId`, `TransactionId`) REFERENCES `transaction` (`BranchId`, `Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,6 +252,7 @@ CREATE TABLE `transactiondetail` (
 
 LOCK TABLES `transactiondetail` WRITE;
 /*!40000 ALTER TABLE `transactiondetail` DISABLE KEYS */;
+INSERT INTO `transactiondetail` VALUES (8,6,1,3,'',3,35000,'2024-12-02 16:21:57',NULL),(9,6,1,1,'',100,20000,'2024-12-02 16:21:57',NULL),(12,6,2,2,'',4,90000,'2024-12-02 17:26:54',NULL),(13,6,2,3,'',10,55000,'2024-12-02 17:26:54',NULL),(14,6,2,1,'',6,50000,'2024-12-02 17:26:54',NULL),(19,6,3,3,'',2,35000,'2024-12-02 17:36:44',NULL),(20,6,3,2,'',20,80000,'2024-12-02 17:36:44',NULL),(21,6,4,3,'',2,35000,'2024-12-02 17:37:33',NULL),(22,6,4,2,'',20,80000,'2024-12-02 17:37:33',NULL),(23,2,1,1,'',10,50000,'2024-12-03 03:16:57',NULL),(24,2,1,2,'',50,90000,'2024-12-03 03:16:57',NULL),(25,2,1,3,'',500,55000,'2024-12-03 03:16:57',NULL);
 /*!40000 ALTER TABLE `transactiondetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,6 +288,7 @@ CREATE TABLE `transportrate` (
 
 LOCK TABLES `transportrate` WRITE;
 /*!40000 ALTER TABLE `transportrate` DISABLE KEYS */;
+INSERT INTO `transportrate` VALUES (1,2,1,20000,'2024-12-02 12:41:58',NULL),(1,2,2,80000,'2024-12-02 14:03:21',NULL),(1,2,3,35000,'2024-12-02 14:03:21',NULL),(1,3,1,50000,'2024-12-02 12:41:58',NULL),(1,3,2,90000,'2024-12-02 14:03:21',NULL),(1,3,3,55000,'2024-12-02 14:03:21',NULL),(1,4,1,65000,'2024-12-02 12:41:58',NULL),(1,4,2,75000,'2024-12-02 14:03:21',NULL),(1,4,3,95000,'2024-12-02 14:03:21',NULL);
 /*!40000 ALTER TABLE `transportrate` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -293,4 +301,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-17 16:22:11
+-- Dump completed on 2024-12-03 10:39:17
