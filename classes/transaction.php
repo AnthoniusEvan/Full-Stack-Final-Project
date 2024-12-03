@@ -116,7 +116,7 @@ class Transaction {
     }
 
     public function get_header($columns="*", $constraints = "1 ", $limit = "10") {
-        $q = "SELECT $columns FROM transaction t INNER JOIN transactiondetail td ON t.Id=td.TransactionId INNER JOIN client c ON t.ClientId = c.Id WHERE $constraints GROUP BY t.Id LIMIT ".$limit;
+        $q = "SELECT $columns FROM transaction t INNER JOIN transactiondetail td ON t.Id=td.TransactionId AND t.BranchId = td.BranchId INNER JOIN client c ON t.ClientId = c.Id INNER JOIN branch b ON t.BranchId = b.Id INNER JOIN city oc ON t.OriginCity = oc.Id INNER JOIN city dc ON t.DestinationCity = dc.Id WHERE $constraints GROUP BY t.Id, t.BranchId LIMIT ".$limit;
 
         $resultSet = $this->dbCon->query($q);
 
@@ -124,8 +124,8 @@ class Transaction {
         return $resultSet;
     }
 
-    public function get_details($columns="*", $transaction_id) {
-        $q = "SELECT $columns FROM transactiondetail td INNER JOIN cage c ON td.CageId = c.Id WHERE td.TransactionId=$transaction_id";
+    public function get_details($columns="*", $transaction_id, $branch_id) {
+        $q = "SELECT $columns FROM transactiondetail td INNER JOIN cage c ON td.CageId = c.Id WHERE td.TransactionId=$transaction_id AND td.BranchId=$branch_id";
 
         $resultSet = $this->dbCon->query($q);
         return $resultSet;

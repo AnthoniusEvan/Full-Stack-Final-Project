@@ -32,9 +32,10 @@
             echo("Update");
 
             $id = $_GET["id"];
+            $branch_id = $_GET["branch_id"];
 
             $columns = "t.Id as id, DATE_FORMAT(t.TransactionDateDate, '%d/%m/%Y') AS date, c.Id as client_id, t.OriginCity as ori_city, t.DestinationCity as dest_city, t.DestinationAddress as address, t.ExpectedArrival as eta, FORMAT(SUM(td.Price*td.Quantity), 0) AS totalsales, t.Status as status";
-            $constraint = " t.Id = $id ";
+            $constraint = " t.Id = $id AND t.BranchId = $branch_id";
             $resultSet = $order->get_header($columns, $constraint, 1);
             
             if($resultSet)
@@ -81,7 +82,7 @@
     <div class="row">
         <div class="form-group col-sm-2">
             <label for="pId">Transaction Id</label>
-            <input class="form-control mb-3" type="text" placeholder="Product Code" id="pId" name="pId" readonly value="<?php echo($id);?>">
+            <input class="form-control mb-3" type="text" placeholder="Product Code" id="pId" name="pId" readonly value="<?php if ($mode=="insert") echo($order->get_new_transaction_id($_SESSION['active_user']->branch_id)); else echo($id);?>">
         </div>
         <div class="form-group col-sm-5" >
             <label for="TransactionDate">Transaction Date</label>
@@ -275,7 +276,7 @@
             <div class="card">
                 <div class="card-body table-border-style">
                     <div class="table-responsive">
-                        <table class="table table-hover" id="tabelDetil">
+                        <table class="table" id="tabelDetil">
                             <thead>
                             <tr>
                                 <?php 
@@ -299,7 +300,7 @@
                             if($mode == "update")
                             {
                                 $columns = "td.CageId as id, c.Name as name, FORMAT(td.Quantity, 0) AS qty, FORMAT(td.Price, 0) AS price, FORMAT(td.Price * td.Quantity, 0) AS subtotal ";
-                                $resultSet = $order->get_details($columns, $id);
+                                $resultSet = $order->get_details($columns, $id, $branch_id);
                                 $i = 0;
                                 while ($rowd = $resultSet->fetch_array()) {
                                     echo("<tr id='detail_".$i."'>\n");
@@ -319,7 +320,7 @@
                             ?>
                             <tr id="total">
                                 <?php if($mode=="update") $c = 0; else $c = 1;?>
-                                <td colspan="<?php echo 3-$c ?>" align="left">TOTAL</td>
+                                <td colspan="<?php echo 3-$c ?>" align="left"><strong>TOTAL</strong></td>
                                 <td colspan="<?php echo 2+$c ?>">
                                     <input type='hidden' name='newProductsCount' id='newProductsCount' value=''>
                                     <div class="input-group">
@@ -396,6 +397,9 @@
                   alert(jsonResults.status);
                   document.getElementById("addPrice").value = '0';
                   document.getElementById("addSubTotal").value = '0';
+                  const selectElement = document.getElementById("CageId");
+                  selectElement.value = '';
+                  selectElement.dispatchEvent(new Event('change'));
               }
           }
       };
@@ -421,12 +425,25 @@
     document.getElementById("DestinationAddress").value) document.getElementById("btnConfirm").innerHTML = "Reset";
         else{
             alert("Please fill in all the required fields!");
-            document.getElementById("CageId").selectedIndex = 0;
             return;
         } 
     }
     else{
+        var n = parseInt($('#newProductsCount').val())||0;
+        if (n>0){
+            if(!confirm("Changing the transaction header will remove all the added products. Would you like to continue?")) return;
+        } 
+
+        for (var i = 0; i < n; i++) {
+            deleteOrderDetail(i);
+        }
         document.getElementById("btnConfirm").innerHTML = "Confirm";
+        document.getElementById("addPrice").value = '0';
+        document.getElementById("addSubTotal").value = '0';
+        document.getElementById("addQty").value = '1';
+        const selectElement = document.getElementById("CageId");
+        selectElement.value = '';
+        selectElement.dispatchEvent(new Event('change'));
     }
     document.getElementById("CageId").disabled = !status;
     document.getElementById("addQty").readOnly = !status;
@@ -458,7 +475,7 @@
         var price = $("#addPrice").val();
         var subTotal = $("#addSubTotal").val();
 
-        if(productId!=''  && qty>0){
+        if(productId!='' && qty>0){
             var n = parseInt($('#newProductsCount').val())||0;
             $('#newProductsCount').val(n+1);
             
@@ -479,7 +496,7 @@
 
         }else{
             if(productId==''){
-                alert("Please specify product to add!");
+                alert("Please specify cage to add!");
             }else if(qty==''){
                 alert("Please specify quantity to add!");
             }

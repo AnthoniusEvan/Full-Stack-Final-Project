@@ -201,6 +201,18 @@ $errorMessage="";
     $constraint.=" AND t.TransactionDateDate = '".$_GET["TransactionDate"]."'";
   }
 
+  if(!empty($_GET["BranchId"]))
+  {
+    $constraint.=" AND t.BranchId = '".$_GET["BranchId"]."'";
+  }
+
+  if(!empty($_GET["Status"]))
+  {
+    $status = $_GET["Status"];
+    if ($status == "void") $constraint.=" AND t.Status = '$status'";
+    else if ($status == "active") $constraint.=" AND t.Status != 'void' OR t.Status IS NULL";
+  }
+
   if(!empty($_GET["ClientId"]))
   {
     $ClientId = $_GET["ClientId"];
@@ -257,21 +269,52 @@ $errorMessage="";
     <input type="hidden" id="page" name="page" value="transactions_list">
 
     <div class="row">
-        <div class="form-group col-sm-7">
+        <div class="form-group col-sm-2">
             <label for="pId">Transaction Id</label>
-            <input class="form-control" type="text" placeholder="Transaction Id" id="pId" name="pId" value="<?php if(!empty($_GET["pId"])) echo($_GET["pId"]);?>">
+            <input class="form-control" type="text" id="pId" name="pId" value="<?php if(!empty($_GET["pId"])) echo($_GET["pId"]);?>">
         </div>
-        <div class="form-group col-sm-5" id="TransactionDate">
+        <div class="form-group col-sm-4" id="TransactionDate">
             <label for="TransactionDate">Transaction Date</label>
             <div class="input-group date">
                 <input type="date" class="form-control" value="<?php if(!empty($_GET["TransactionDate"])) echo($_GET["TransactionDate"]);?>" id="TransactionDate" name="TransactionDate" >
             </div>
-            
+        </div>
+        <div class="form-group col-sm-4" id="BranchId">
+            <label for="BranchId">Branch</label>
+            <select class="select2-single form-control" id="BranchId" name="BranchId">
+                <option value=''>Search by branch </option>
+                <?php
+                $q = "SELECT Id, Name FROM branch";
+
+                $resBranches = $dbCon->query($q);
+                if($resBranches)
+                {
+                    while($rBranch = $resBranches->fetch_array())
+                    {
+                        $selectedStr = "";
+                        if (!empty($_GET["BranchId"]) && $rBranch["Id"] == $_GET["BranchId"])
+                        {
+                            $selectedStr = "selected";
+                        }
+
+                        echo("<option value='".$rBranch["Id"]."' ".$selectedStr.">".$rBranch["Name"]."</option>");
+                    }
+                }
+                ?>
+            </select>
+        </div>
+        <div class="form-group col-sm-2">
+            <label for="Status">Status</label>
+            <select class="form-control" id="Status" name="Status">
+                <option value='any' <?php if(!empty($_GET["Status"]) && $_GET["Status"]=="any") echo("selected");?>>Any</option>
+                <option value='active' <?php if(!empty($_GET["Status"]) && $_GET["Status"]=="active") echo("selected");?>>Active</option>
+                <option value='void' <?php if(!empty($_GET["Status"]) && $_GET["Status"]=="void") echo("selected");?>>Void</option>
+            </select>
         </div>
     </div>
         
     <div class="row">
-        <div class="form-group col-sm-7">
+        <div class="form-group col-sm-4">
             <label for="ClientId">Client</label>
             <select class="select2-single form-control" id="ClientId" name="ClientId">
                 <option value=''>Search by client </option>
@@ -296,7 +339,32 @@ $errorMessage="";
             </select>
         </div>
         
-        <div class="form-group col-sm-5">
+        <div class="form-group col-sm-4">
+        <label for="OriginCity">Origin City</label>
+            <select class="select2-single form-control" id="OriginCity" name="OriginCity">
+                <option value=''>Search by origin city</option>
+                <?php
+                $q = "SELECT Id, Name FROM city";
+
+                $resStatuses = $dbCon->query($q);
+                if($resStatuses)
+                {
+                    while($rOriCity = $resStatuses->fetch_array())
+                    {
+                        $selectedStr = "";
+                        if ((!empty($_GET["OriginCity"]) || $_GET["OriginCity"]!="") && $rOriCity["Id"] == $_GET["OriginCity"])
+                        {
+                            $selectedStr = "selected";
+                        }
+
+                        echo("<option value='".$rOriCity["Id"]."' ".$selectedStr.">".$rOriCity["Name"]."</option>");
+                    }
+                }
+                ?>
+            </select>
+        </div>
+
+        <div class="form-group col-sm-4">
         <label for="DestinationCity">Destination City</label>
             <select class="select2-single form-control" id="DestinationCity" name="DestinationCity">
                 <option value=''>Search by destination city</option>
@@ -323,16 +391,18 @@ $errorMessage="";
     </div>
   
 
-    <div class="row">
-        <div class="col-sm-2"> 
-          <button type="submit" class="btn btn-primary" name="action" value="search" formaction="index.php">Search</button>
-        </div>
-
+    <div class="row mt-2 mb-4">
         <div class="col-sm-4"> 
-          <button type="submit" class="btn btn-primary" name="action" value="xls" formaction="index2.php" formtarget="_blank"><i class="fas fa-file-excel"></i> Excel</button>
+          <button type="submit" class="btn btn-primary" name="action" value="search" formaction="index.php">Search</button>
+          
+          <a class="btn btn-outline-primary" href="index.php?page=transactions_list">Clear</a>
         </div>
 
-        <div class="col-sm-6" style='text-align: right;'> 
+        <div class="col-sm-4" style="text-align:center"> 
+          <button type="submit" class="btn" style="background-color: #187448; color:white;" name="action" value="xls" formaction="index2.php" formtarget="_blank"><i class="bi bi-file-excel"></i> Excel</button>
+        </div>
+
+        <div class="col-sm-4" style='text-align: right;'> 
           <a href="index.php?page=transaction_detail&mode=insert"><button type="button" class="btn btn-success">Add New</button></a>
         </div>
     </div>
@@ -351,9 +421,10 @@ $errorMessage="";
           <tr>
             <th>Id</th>
             <th>Date</th>
+            <th>Branch</th>
             <th>Client</th>
-            <th>Destination Address</th>
-            <th>Expected Arrival</th>
+            <th>Origin City</th>
+            <th>Destination City</th>
             <th style='text-align: right;'>Total Sales</th>
             <th style='text-align: center;'><i class="bi bi-pencil-square"></i></th>
             <th style='text-align: center;'><i class="bi bi-printer"></i></th>
@@ -371,7 +442,7 @@ $errorMessage="";
             $pageStart = ($pageNum - 1) * $maxRows;
 
 
-            $columns = "t.Id as id, DATE_FORMAT(t.TransactionDateDate, '%d/%m/%Y') AS date, c.Name as client_name, t.DestinationAddress as address, DATE_FORMAT(t.ExpectedArrival, '%d/%m/%Y') as eta, FORMAT(SUM(td.Price * td.Quantity), 0) AS totalsales";
+            $columns = "t.Id as id, DATE_FORMAT(t.TransactionDateDate, '%d/%m/%Y') AS date, b.Id as branch_id,b.Name as branch_name, c.Name as client_name, t.DestinationAddress as address, oc.Name AS ori_city, dc.Name AS dest_city, FORMAT(SUM(td.Price * td.Quantity), 0) AS totalsales";
             $limit = $pageStart.", ". $maxRows;
             $resultSet = $order->get_header($columns, $constraint, $limit);
 
@@ -380,11 +451,12 @@ $errorMessage="";
               echo("<tr>");
               echo("<td>".$row['id']."</td>");
               echo("<td>".$row['date']."</td>");
+              echo("<td>".$row['branch_name']."</td>");
               echo("<td>".$row['client_name']."</td>");
-              echo("<td>".$row['address']."</td>");
-              echo("<td>".$row['eta']."</td>");
+              echo("<td>".$row['ori_city']."</td>");
+              echo("<td>".$row['dest_city']."</td>");
               echo("<td style='text-align: right;'>".$row['totalsales']."</td>");
-              echo("<td style='text-align: center;'><a href='index.php?page=transaction_detail&mode=update&id=".$row['id']."' class='btn-sm btn-primary'><i class='bi bi-pencil-square'></i></a></td>");
+              echo("<td style='text-align: center;'><a href='index.php?page=transaction_detail&mode=update&id=".$row['id']."&branch_id=".$row["branch_id"]."' class='btn-sm btn-primary'><i class='bi bi-pencil-square'></i></a></td>");
               echo("<td style='text-align: center;'><a href='index2.php?page=transactions_list&mode=pdf&id=".$row['id']."' class='btn-sm btn-primary'><i class='bi bi-printer'></i></a></td>");
               echo("</tr>");
             }
