@@ -217,7 +217,7 @@ if (!$validation_status){
                 if(!empty($_GET["CityId"])){
                     list($city, $validation_status) = sanitize($dbCon, $_GET["CityId"], "int");
                     if($validation_status){
-                        $constraint.=" AND c.CityId ='$city'";
+                        $constraint.=" AND c.Id ='$city'";
                     }
                 }
 
