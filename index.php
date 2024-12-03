@@ -134,7 +134,7 @@ if (isset($_GET['logout'])){
                             </a>
                         </li>
 
-                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="transportrates_list" || $_GET["page"]=="transportrate_detail")) echo('active') ?>">
+                        <li class="sidebar-item <?php if (isset($_GET["page"]) && ($_GET["page"]=="transportrates_list" || $_GET["page"]=="transportrates_detail")) echo('active') ?>">
                             <a href="index.php?page=transportrates_list" class='sidebar-link'>
                                 <i class="bi bi-truck"></i>
                                 <span>Transport Rate</span>

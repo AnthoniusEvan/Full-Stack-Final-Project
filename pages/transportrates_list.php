@@ -38,13 +38,31 @@ if (!empty($_POST["mode"])) {
 
     switch ($_POST["mode"]) {
         case "insert":
+            if (empty($_POST["cityOrigin"])) {
+                $errorMsg = 'Please select a city for the origin!';
+                break;
+            }
+            if (empty($_POST["cityDestination"])) {
+                $errorMsg = 'Please select a city for the destination!';
+                break;
+            }
+            if (empty($_POST["cageId"])) {
+                $errorMsg = 'Please select a cage!';
+                break;
+            }
             if (empty($_POST["Rate"])) {
                 $errorMsg = 'Please enter a transport rate!';
                 break;
             }
+            if ($transporrate->check_rate_exists($_POST["cityOrigin"], $_POST["cityDestination"], $_POST["cageId"])) {
+                $errorMsg = "Combination of CityOrigin, CityDestination, and Cage already exists!";
+                break;
+            }
+
             if ($transporrate->insert_data($post_data) === FALSE) {
                 $errorMsg = "Failed to insert transport rate.";
             }
+
             break;
 
         case "update":
@@ -258,17 +276,17 @@ if (!$validation_status) {
         <nav>
             <ul class="pagination justify-content-end">
                 <li class="page-item <?php if($pageNum<=1){ echo 'disabled';}?>">
-                    <a class="page-link" href="<?php if($pageNum<=1){ echo '#';} else { echo "?page=transportrate_list&pageNum=" . ($pageNum-1);} ?>">Previous</a>
+                    <a class="page-link" href="<?php if($pageNum<=1){ echo '#';} else { echo "?page=transportrates_list&pageNum=" . ($pageNum-1);} ?>">Previous</a>
                 </li>   
 
                 <?php for ($i=1; $i<=$totalPages;$i++){?>
                     <li class="page-item <?php if ($pageNum==$i) {echo 'active';}?>">
-                        <a class="page-link" href="?page=transportrate_list&pageNum=<?php echo($i);?>"><?php echo($i);?></a>
+                        <a class="page-link" href="?page=transportrates_list&pageNum=<?php echo($i);?>"><?php echo($i);?></a>
                     </li>
                 <?php }?>
                 
                     <li class="page-item <?php if($pageNum>=$totalPages){ echo 'disabled';}?>">
-                    <a class="page-link" href="<?php if($pageNum>=$totalPages){ echo '#';} else { echo "?page=transportrate_list&pageNum=" . ($pageNum + 1);}?>">Next</a>
+                    <a class="page-link" href="<?php if($pageNum>=$totalPages){ echo '#';} else { echo "?page=transportrates_list&pageNum=" . ($pageNum + 1);}?>">Next</a>
                 </li>  
             </ul>
         </nav>

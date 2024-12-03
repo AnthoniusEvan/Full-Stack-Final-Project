@@ -62,7 +62,7 @@ $transportRate = new TransportRate($dbCon);
         ?>
         <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="./">Home</a></li>
-            <li class="breadcrumb-item"><a href="index.php?page=transportRates_list">Transport Rates</a></li>
+            <li class="breadcrumb-item"><a href="index.php?page=transportrates_list">Transport Rates</a></li>
             <li class="breadcrumb-item active" aria-current="page"><?php echo($modeText) ?></li>
         </ol>
     </div>
@@ -81,7 +81,7 @@ $transportRate = new TransportRate($dbCon);
                 ?>  
                 <div class="form-group" id = "txtCityOri" name = "txtCityOri">
                 <label for="cityOrigin">City Origin</label>
-                <select class="select2-single form-control" name="cityOrigin" id="cityOrigin" required>
+                <select class="select2-single form-control" name="cityOrigin" id="cityOrigin" required <?php if ($mode=="update") echo "disabled" ?>>
                     <option value="">Select a City Origin</option>
                     <?php
                     $q = "SELECT id, name FROM city";
@@ -99,7 +99,7 @@ $transportRate = new TransportRate($dbCon);
 
                 <div class="form-group" id = "txtCityDes" name = "txtCityDes">
                 <label for="cityDestination">City Destination</label>
-                <select class="select2-single form-control" name="cityDestination" id="cityDestination" required>
+                <select class="select2-single form-control" name="cityDestination" id="cityDestination" required <?php if ($mode=="update") echo "disabled" ?>>
                     <option value="">Select a City Destination</option>
                     <?php
                     if (!empty($_GET["cityDestination"])) {
@@ -120,7 +120,7 @@ $transportRate = new TransportRate($dbCon);
 
                 <div class="form-group" id = "txtCage" name = "txtCage"> 
                 <label for="cageId">Cage</label>
-                <select class="select2-single form-control" name="cageId" id="cageId" required>
+                <select class="select2-single form-control" name="cageId" id="cageId" required <?php if ($mode=="update") echo "disabled" ?>>
                     <option value="">Select a Cage</option>
                     <?php
                     if (!empty($_GET["cageId"])) {
@@ -183,7 +183,7 @@ $transportRate = new TransportRate($dbCon);
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-danger ml-1" name="delete" value="Delete">Yes</button>
+                                                <button type="submit" class="btn btn-danger ml-1" name="delete" value="Delete" onclick="sendDisabledFields(); return true;">Yes</button>
                                             </div>
                                         </div>
                                     </div>
@@ -194,7 +194,7 @@ $transportRate = new TransportRate($dbCon);
                         ?>
                     </div>
                     <div class="col-sm-4" style="text-align:right;">
-                        <button type="submit" id="saveBtn"class="btn btn-primary" name="save" value="Save">
+                        <button type="submit" id="saveBtn" class="btn btn-primary" name="save" value="Save" onclick="sendDisabledFields(); return true;">
                             <?php
                             switch ($mode) {
                                 case "insert":
@@ -216,6 +216,11 @@ $transportRate = new TransportRate($dbCon);
 </div>
 
 <script>
+    function sendDisabledFields(){
+        document.getElementById("cageId").disabled = false;
+        document.getElementById("cityOrigin").disabled = false;
+        document.getElementById("cityDestination").disabled = false;
+    }
     $(document).ready(function(){
         $('.select2-single').select2();
     });

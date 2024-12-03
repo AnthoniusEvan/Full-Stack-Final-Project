@@ -29,10 +29,6 @@ class TransportRate {
     }
 
     public function insert_data($data = array()) {
-        if ($this->check_rate_exists($data['CityOrigin'], $data['CityDestination'], $data['CageId'])) {
-            return "Combination of CityOrigin, CityDestination, and Cage already exists, please update the existing record.";
-        }
-    
         foreach ($data as $key => $value) {
             $data[$key] = "'" . $this->dbCon->real_escape_string($value) . "'";
         }
@@ -58,7 +54,7 @@ class TransportRate {
             SET " . implode(',', $updates) . ", LastUpdateTime = CURRENT_TIMESTAMP() 
             WHERE CityOrigin = '$cityOrigin' AND CityDestination = '$cityDestination' AND CageId = '$cageId'
         ";
-        echo $query;
+        //echo $query;
         return $this->dbCon->query($query);
     }
 
