@@ -14,6 +14,40 @@ class TransportRate {
         $this->dbCon = $dbConnection;
     }
 
+    public function xls($constraint){
+        header("Content-type: application/vnd-ms-excel");
+        header("Content-Disposition: attachment; filename=PriceList.xls");
+        ?>
+            <html>
+                <body>
+                    <table border="1">
+                        <tr>
+                            <th>City Origin</th>
+                            <th>City Destination</th>
+                            <th>Cage</th>
+                            <th>Rate</th>
+                        </tr>
+                        <?php
+                        $columns = "Origin.Name AS CityOrigin, Destination.Name AS CityDestination, c.Name AS Cage, t.Rate";
+                        $limit=1000;
+                        $resultSet = $this->get_inner_join_data($columns, $constraint, $limit);
+                        while($row = $resultSet->fetch_array()){
+                            echo("
+                            <tr>
+                                <td>".$row["CityOrigin"]."</td>
+                                <td>".$row["CityDestination"]."</td>
+                                <td>".$row["Cage"]."</td>
+                                <td>".$row["Rate"]."</td>
+                            </tr>
+                            ");
+                        }
+                        ?>
+                    </table>
+                </body>
+            </html>
+        <?php
+    }
+
     public function get_data($columns = "*", $constraints = "1", $limit = 10) {
         $query = "
             SELECT $columns 

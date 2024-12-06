@@ -1,0 +1,83 @@
+            <html>
+                <body>
+                    <table border="1">
+                        <tr>
+                            <th>City Origin</th>
+                            <th>City Destination</th>
+                            <th>Cage</th>
+                            <th>Rate</th>
+                        </tr>
+                        
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Malang</td>
+                                <td>Cage A</td>
+                                <td>20000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Jember</td>
+                                <td>Cage A</td>
+                                <td>60000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Madiun</td>
+                                <td>Cage A</td>
+                                <td>65000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Malang</td>
+                                <td>Cage B</td>
+                                <td>80000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Jember</td>
+                                <td>Cage B</td>
+                                <td>90000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Madiun</td>
+                                <td>Cage B</td>
+                                <td>75000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Malang</td>
+                                <td>Cage C</td>
+                                <td>35000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Jember</td>
+                                <td>Cage C</td>
+                                <td>55000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Madiun</td>
+                                <td>Cage C</td>
+                                <td>95000</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Surabaya</td>
+                                <td>Malang</td>
+                                <td>Cage D</td>
+                                <td>150000</td>
+                            </tr>
+                                                </table>
+                </body>
+            </html>
+        

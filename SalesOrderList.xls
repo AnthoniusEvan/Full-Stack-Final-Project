@@ -1,0 +1,72 @@
+            <html>
+                <body>
+                    <table border="1">
+                        <tr>
+                            <th>Id</th>
+                            <th>Date</th>
+                            <th>Branch</th>
+                            <th>Client</th>
+                            <th>Origin City</th>
+                            <th>Destination City</th>
+                            <th style='text-align: right;'>Total Sales</th>
+                            <th>Expected Arrival</th>
+                        </tr>
+                        
+                            <tr>
+                                <td>1</td>
+                                <td>03/12/2024</td>
+                                <td>Pet Voyage II</td>
+                                <td>Rachel Allen</td>
+                                <td>Jember</td>
+                                <td>Surabaya</td>
+                                <td style='text-align: right;'>32,500,000</td>
+                                <td>12/03/2025</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>1</td>
+                                <td>02/12/2024</td>
+                                <td>Pet Voyage VI</td>
+                                <td>Alice Johnson</td>
+                                <td>Surabaya</td>
+                                <td>Malang</td>
+                                <td style='text-align: right;'>2,105,000</td>
+                                <td>12/11/2025</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>2</td>
+                                <td>02/12/2024</td>
+                                <td>Pet Voyage VI</td>
+                                <td>Noah King</td>
+                                <td>Surabaya</td>
+                                <td>Jember</td>
+                                <td style='text-align: right;'>1,210,000</td>
+                                <td>21/12/2022</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>3</td>
+                                <td>02/12/2024</td>
+                                <td>Pet Voyage VI</td>
+                                <td>Jane Smith</td>
+                                <td>Malang</td>
+                                <td>Surabaya</td>
+                                <td style='text-align: right;'>1,670,000</td>
+                                <td>09/09/2029</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>4</td>
+                                <td>02/12/2024</td>
+                                <td>Pet Voyage VI</td>
+                                <td>Jane Smith</td>
+                                <td>Malang</td>
+                                <td>Surabaya</td>
+                                <td style='text-align: right;'>1,670,000</td>
+                                <td>09/09/2029</td>
+                            </tr>
+                                                </table>
+                </body>
+            </html>
+        

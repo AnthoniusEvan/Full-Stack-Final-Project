@@ -19,33 +19,41 @@ class Transaction {
         $mpdf->WriteHTML("<HTML><BODY>");
 
         // Print order header
-        $columns = "o.id, DATE_FORMAT(o.order_date, '%d/%m/%Y') AS orderdate, o.customer_id, c.company, o.ship_address, o.ship_city, FORMAT(SUM(od.quantity*od.unit_price),0) AS totalsales, os.status_name, DATE_FORMAT(o.paid_date, '%d/%m/%Y') as paiddate";
-        $constraint = "o.id = $id";
+        $columns = "t.Id as id, DATE_FORMAT(t.TransactionDateDate, '%d/%m/%Y') AS date, b.Id as branch_id,b.Name as branch_name, c.Name as client_name, t.DestinationAddress as address, oc.Name AS ori_city, dc.Name AS dest_city, FORMAT(SUM(td.Price * td.Quantity), 0) AS totalsales, DATE_FORMAT(t.ExpectedArrival, '%d/%m/%Y') as eta";
+        $constraint = "t.Id = $id";
         $resultSet = $this->get_header($columns, $constraint, 1);
         if ($resultSet) $row = $resultSet->fetch_array();
         else die('Incorrect Order Id');
 
         $html="<table width='100%' border='0' cellpadding='0' cellspacing='0'>
         <tr><td style='width: 100%; font-size:18pt; font-weight:bold;'>SALES ORDER</td></tr></table>";
-        $html.="<table width='100%' border='0' cellpadding='0' cellspacing='0'>
+        $html.="<table width='100%' border='0' cellpadding='0' cellspacing='0' style='margin-top: 20px;'>
         <tr>
-            <td style='height:30px; width:15%;'>Order Id</td>
-            <td style='width:25%;'>: ".$row["id"]."</td>
-            <td style='width:10%;'>Customer</td>
-            <td style='width:57%;'>: ".$row["company"]."</td>
+            <td style='height:10%; width:15%;'>Transaction Id</td>
+            <td style='width:20%;'>: ".$row["id"]."</td>
+            <td style='width:20%;'>Branch</td>
+            <td style='width:20%;'>: ".$row["branch_name"]."</td>
+            <td style='width:15%;'>Client</td>
+            <td style='width:15%;'>: ".$row["client_name"]."</td>
         </tr>
         <tr>
-            <td style='height:30px;'>Order Date</td>
-            <td>: ".$row["orderdate"]."</td>
-            <td>Address</td>
-            <td>: ".$row["ship_address"].", ".$row["ship_city"]."</td>
+            <td style='height:30px;'>Issued Date</td>
+            <td>: ".$row["date"]."</td>
+            <td style='height:36px;'>Expected Arrival</td>
+            <td>: ".$row["eta"]."</td>
+        </tr>
+        <tr>
+            <td>Origin</td>
+            <td>: ".$row["ori_city"]."</td>
+            <td>Destination</td>
+            <td colspan=3>: ".$row["address"].", ".$row["dest_city"]."</td>
         </tr></table>
         ";
 
-        $columns = "od.product_id, p.product_name, FORMAT(od.quantity,0) AS qty, FORMAT(od.unit_price, 0) AS price, FORMAT(od.unit_price*od.quantity, 0) AS subtotal";
-        $resultSet = $this->get_details($columns, $id);
+        $columns = "td.CageId as id, c.Name as name, FORMAT(td.Quantity, 0) AS qty, FORMAT(td.Price, 0) AS price, FORMAT(td.Price * td.Quantity, 0) AS subtotal";
+        $resultSet = $this->get_details($columns, $id, $row["branch_id"]);
 
-        $html.="<table width='100%' border='1' cellpadding='3' cellspacing='0'>
+        $html.="<table width='100%' border='1' cellpadding='3' cellspacing='0' style='margin-top: 20px;'>
         <tr>
             <th style='width:5%;'>#</th>
             <th style='width:35%;'>Product</th>
@@ -57,7 +65,7 @@ class Transaction {
         while($rowd=mysqli_fetch_array($resultSet)){
             $html.="<tr>
                 <td style='font-size:10pt;'>".$i."</td>
-                <td style='font-size:10pt;'>".$rowd["product_name"]."</td>
+                <td style='font-size:10pt;'>".$rowd["name"]."</td>
                 <td style='font-size:10pt; text-align:right;'>".$rowd["qty"]."</td>
                 <td style='font-size:10pt; text-align:right;'>".$rowd["price"]."</td>
                 <td style='font-size:10pt; text-align:right;'>".$rowd["subtotal"]."</td>
@@ -87,24 +95,28 @@ class Transaction {
                         <tr>
                             <th>Id</th>
                             <th>Date</th>
-                            <th>Customer</th>
-                            <th>Total Sales</th>
-                            <th>Status</th>
-                            <th>Paid Date</th>
+                            <th>Branch</th>
+                            <th>Client</th>
+                            <th>Origin City</th>
+                            <th>Destination City</th>
+                            <th>Expected Arrival</th>
+                            <th style='text-align: right;'>Total Sales</th>
                         </tr>
                         <?php
-                        $columns = "o.id, DATE_FORMAT(o.order_date, '%d/%m/%Y') AS orderdate, c.company, FORMAT(SUM(od.quantity*od.unit_price),0) AS totalsales, os.status_name, DATE_FORMAT(o.paid_date, '%d/%m/%Y') AS paiddate";
+                        $columns = "t.Id as id, DATE_FORMAT(t.TransactionDateDate, '%d/%m/%Y') AS date, DATE_FORMAT(t.ExpectedArrival, '%d/%m/%Y') AS eta, b.Id as branch_id,b.Name as branch_name, c.Name as client_name, t.DestinationAddress as address, oc.Name AS ori_city, dc.Name AS dest_city, FORMAT(SUM(td.Price * td.Quantity), 0) AS totalsales";
                         $limit=1000;
                         $resultSet = $this->get_header($columns, $constraint, $limit);
                         while($row = $resultSet->fetch_array()){
                             echo("
                             <tr>
-                                <td>".$row["id"]."</td>
-                                <td>".$row["orderdate"]."</td>
-                                <td>".$row["company"]."</td>
-                                <td>".$row["totalsales"]."</td>
-                                <td>".$row["status_name"]."</td>
-                                <td>".$row["paiddate"]."</td>
+                                <td>".$row['id']."</td>
+                                <td>".$row['date']."</td>
+                                <td>".$row['branch_name']."</td>
+                                <td>".$row['client_name']."</td>
+                                <td>".$row['ori_city']."</td>
+                                <td>".$row['dest_city']."</td>
+                                <td>".$row['eta']."</td>
+                                <td style='text-align: right;'>".$row['totalsales']."</td>
                             </tr>
                             ");
                         }

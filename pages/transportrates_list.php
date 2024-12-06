@@ -86,6 +86,7 @@ if (!empty($_POST["mode"])) {
             die('Incorrect Access');
     }
 
+
     if ($errorMsg == "") {
         ?>
         <div class="alert alert-success alert-dismissible show fade" role="alert">
@@ -100,6 +101,33 @@ if (!empty($_POST["mode"])) {
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <?php
+    }
+}
+
+
+$constraint = "1";
+
+if (!empty($_GET["CityOrigin"])) {
+    list($cityOrigin, $validation_status) = sanitize($dbCon, $_GET["CityOrigin"], "int");
+    $constraint .= " AND CityOrigin = ".$cityOrigin;
+}
+if (!empty($_GET["CityDestination"])) {
+    list($CityDestination, $validation_status) = sanitize($dbCon, $_GET["CityDestination"], "int");
+    $constraint .= " AND CityDestination = ".$CityDestination;
+}
+if (!empty($_GET["CageId"])) {
+    list($cage, $validation_status) = sanitize($dbCon, $_GET["CageId"], "int");
+    $constraint .= " AND cage = ".$cage;
+}
+if (!empty($_GET["rate"])) {
+    list($rate, $validation_status) = sanitize($dbCon, $_GET["rate"], "int");
+    $constraint .= " AND t.rate = ".$rate;
+}
+
+if (!empty($_GET["action"])){
+    if($_GET["action"]=="xls"){
+        $transporrate->xls($constraint);
+        exit();
     }
 }
 
@@ -133,8 +161,8 @@ if (!$validation_status) {
                     <?php
                         if(!empty($_GET["CityOrigin"])){
                             list($city, $validation_status) = sanitize($dbCon, $_GET["CityOrigin"], "int");
-                            if(!$validation_status){
-                                $cityOri="";
+                            if($validation_status){
+                                $cityOri=$city;
                             }
                         }
                         
@@ -158,8 +186,8 @@ if (!$validation_status) {
                     <?php
                         if(!empty($_GET["CityDestination"])){
                             list($city, $validation_status) = sanitize($dbCon, $_GET["CityDestination"], "int");
-                            if(!$validation_status){
-                                $cityDes="";
+                            if($validation_status){
+                                $cityDes=$city;
                             }
                         }
                         
@@ -182,10 +210,13 @@ if (!$validation_status) {
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
-                <div class="col-sm-6" style="text-align:right;">
+                <div class="col-sm-4" style="text-align:center"> 
+                    <button type="submit" class="btn" style="background-color: #187448; color:white;" name="action" value="xls" formaction="report.php?page=transportrates_list" formtarget="_blank"><i class="bi bi-file-excel"></i> Excel</button>
+                </div>
+                <div class="col-sm-4" style="text-align:right;">
                     <a href="index.php?page=transportrates_detail&mode=insert">
                         <button type="button" class="btn btn-success">Add New</button>
                     </a>
@@ -208,25 +239,6 @@ if (!$validation_status) {
         </thead>
         <tbody>
             <?php
-            $constraint = "1";
-
-            if (!empty($_GET["CityOrigin"])) {
-                list($cityOrigin, $validation_status) = sanitize($dbCon, $_GET["CityOrigin"], "int");
-                $constraint .= " AND CityOrigin = ".$cityOrigin;
-            }
-            if (!empty($_GET["CityDestination"])) {
-                list($CityDestination, $validation_status) = sanitize($dbCon, $_GET["CityDestination"], "int");
-                $constraint .= " AND CityDestination = ".$CityDestination;
-            }
-            if (!empty($_GET["CageId"])) {
-                list($cage, $validation_status) = sanitize($dbCon, $_GET["CageId"], "int");
-                $constraint .= " AND cage = ".$cage;
-            }
-            if (!empty($_GET["rate"])) {
-                list($rate, $validation_status) = sanitize($dbCon, $_GET["rate"], "int");
-                $constraint .= " AND t.rate = ".$rate;
-            }
-
             $pageStart = ($pageNum - 1) * $maxRows;
 
             $columns = "Origin.Name AS CityOrigin, Destination.Name AS CityDestination, c.Name AS Cage, t.Rate";

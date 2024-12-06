@@ -14,14 +14,17 @@ $errorMessage="";
   {
     $header_data = array();
 
-    if(!empty($_POST["TransactionDate"])){
-        // list($header_data['TransactionDateDate'],  $validation_status) = sanitize($dbCon, $_POST["TransactionDate"], "string");
-        
+    if(!empty($_POST["DateFrom"])){
         //convert dd/mm/yyyy to yyyy-mm-dd
-        list($orderDate, $orderMonth, $orderYear) = explode("/", $_POST["TransactionDate"]);
-        $header_data['TransactionDateDate'] = $orderYear."-".$orderMonth."-".$orderDate;
+        list($orderDate, $orderMonth, $orderYear) = explode("/", $_POST["DateFrom"]);
+        $header_data['DateFrom'] = $orderYear."-".$orderMonth."-".$orderDate;
     }
 
+    if(!empty($_POST["DateTo"])){
+      //convert dd/mm/yyyy to yyyy-mm-dd
+      list($orderDate, $orderMonth, $orderYear) = explode("/", $_POST["DateTo"]);
+      $header_data['DateTo'] = $orderYear."-".$orderMonth."-".$orderDate;
+  }
 
     if(!empty($_POST["ClientId"])){
       list($header_data['ClientId'], $validation_status) = sanitize($dbCon, $_POST["ClientId"], "int");
@@ -196,10 +199,16 @@ $errorMessage="";
     $constraint.=" AND t.Id = '$pId'";
   }
 
-  if(!empty($_GET["TransactionDate"]))
+  if(!empty($_GET["DateFrom"]))
   {
-    $constraint.=" AND t.TransactionDateDate = '".$_GET["TransactionDate"]."'";
+    $constraint.=" AND t.TransactionDateDate >= '".$_GET["DateFrom"]."'";
   }
+
+  if(!empty($_GET["DateTo"]))
+  {
+    $constraint.=" AND t.TransactionDateDate <= '".$_GET["DateTo"]."'";
+  }
+
 
   if(!empty($_GET["BranchId"]))
   {
@@ -273,13 +282,24 @@ $errorMessage="";
             <label for="pId">Transaction Id</label>
             <input class="form-control" type="text" id="pId" name="pId" value="<?php if(!empty($_GET["pId"])) echo($_GET["pId"]);?>">
         </div>
-        <div class="form-group col-sm-4" id="TransactionDate">
-            <label for="TransactionDate">Transaction Date</label>
-            <div class="input-group date">
-                <input type="date" class="form-control" value="<?php if(!empty($_GET["TransactionDate"])) echo($_GET["TransactionDate"]);?>" id="TransactionDate" name="TransactionDate" >
+        <div class="form-group col-sm-5" id="DateFrom">
+          <div class="row">
+            <div class="form-group col-sm-6">
+              <label for="DateFrom">Date From</label>
+              <div class="input-group date">
+                  <input type="date" class="form-control" value="<?php if(!empty($_GET["DateFrom"])) echo($_GET["DateFrom"]);?>" id="DateFrom" name="DateFrom" >
+              </div>
             </div>
+
+            <div class="form-group col-sm-6">
+              <label for="DateTo">Date To</label>
+              <div class="input-group date">
+                  <input type="date" class="form-control" value="<?php if(!empty($_GET["DateTo"])) echo($_GET["DateTo"]);?>" id="DateTo" name="DateTo" >
+              </div>
+            </div>
+          </div>  
         </div>
-        <div class="form-group col-sm-4" id="BranchId">
+        <div class="form-group col-sm-3" id="BranchId">
             <label for="BranchId">Branch</label>
             <select class="select2-single form-control" id="BranchId" name="BranchId">
                 <option value=''>Search by branch </option>
@@ -399,7 +419,7 @@ $errorMessage="";
         </div>
 
         <div class="col-sm-4" style="text-align:center"> 
-          <button type="submit" class="btn" style="background-color: #187448; color:white;" name="action" value="xls" formaction="index2.php" formtarget="_blank"><i class="bi bi-file-excel"></i> Excel</button>
+          <button type="submit" class="btn" style="background-color: #187448; color:white;" name="action" value="xls" formaction="report.php?page=transactions_list" formtarget="_blank"><i class="bi bi-file-excel"></i> Excel</button>
         </div>
 
         <div class="col-sm-4" style='text-align: right;'> 
@@ -457,7 +477,7 @@ $errorMessage="";
               echo("<td>".$row['dest_city']."</td>");
               echo("<td style='text-align: right;'>".$row['totalsales']."</td>");
               echo("<td style='text-align: center;'><a href='index.php?page=transaction_detail&mode=update&id=".$row['id']."&branch_id=".$row["branch_id"]."' class='btn-sm btn-primary'><i class='bi bi-pencil-square'></i></a></td>");
-              echo("<td style='text-align: center;'><a href='index2.php?page=transactions_list&mode=pdf&id=".$row['id']."' class='btn-sm btn-primary'><i class='bi bi-printer'></i></a></td>");
+              echo("<td style='text-align: center;'><a href='report.php?page=transactions_list&mode=pdf&id=".$row['id']."' class='btn-sm btn-primary'><i class='bi bi-printer'></i></a></td>");
               echo("</tr>");
             }
           }
@@ -515,16 +535,6 @@ $errorMessage="";
 <!-- Paging Start-->
 
 <!-- Javascript for this page -->
-<script>
-    $(document).ready(function () {
-      $('#TransactionDate .input-group.date').datepicker({
-        format: 'dd/mm/yyyy',
-        todayBtn: 'linked',
-        todayHighlight: true,
-        autoclose: true,        
-      });
-    });
-</script>
 
 <script>
   $(document).ready(function () {
